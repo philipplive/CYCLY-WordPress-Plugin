@@ -5,7 +5,7 @@
  * @package           	CYCLY
  * @author            	CYCLY (Optimanet Schweiz AG)
  * @copyright         	2020 Optimanet Schweiz AG
- * @contact        	  	https://cycly.ch/kontakt/
+ * @contact				https://cycly.ch/kontakt/
  *
  * Plugin Name:       	CYCLY Connector
  * Plugin URI:        	https://cycly.ch
@@ -17,7 +17,7 @@
  * Author URI:      	https://optimanet.ch
  * License:          	Apache License (V2)
  *
- * @TODO			 	View für Mitarbeiter
+ * @TODO				View für Mitarbeiter
  */
 
 if (!class_exists('HfCore\System')) {
