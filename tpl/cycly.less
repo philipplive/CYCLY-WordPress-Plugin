@@ -1,0 +1,297 @@
+#cycly-bikes .dialog dl, #cycly-bikes .dialog dt, #cycly-bikes .dialog dd, #cycly-bikes .dialog p {
+	font-family: Arial;
+	margin: 0;
+}
+
+#cycly-bikes {
+	margin-bottom: 0;
+
+	.items {
+		display: grid;
+		margin: 4rem 0;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 2rem;
+		grid-row-gap: 4rem;
+
+		.item {
+			font-size: 1.5rem;
+			text-align: center;
+			transition: all 0.2s ease-in-out;
+			opacity: 1;
+			cursor: pointer;
+
+			&.fadeout {
+				opacity: 0;
+			}
+
+			.title strong {
+				padding-right: 1rem;
+			}
+
+			.image {
+				border-bottom: 0.5rem solid #666666;
+				height: 15rem;
+				background-color: #fff;
+
+				display: block;
+				align-items: center;
+
+				img {
+					display: inline-block;
+					max-width: 100%;
+					max-height: 100%;
+					padding: 1rem;
+				}
+			}
+		}
+	}
+
+	.filters {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 1rem;
+		white-space: nowrap;
+
+	}
+
+	label {
+		background: #fff;
+		border: 1px solid #e2e2e2;
+		border-radius: 26px;
+		padding: 1rem 2rem;
+		flex-flow: row;
+		justify-content: stretch;
+		align-items: stretch;
+		display: flex;
+		font-size: 1.5rem;
+	}
+
+	select {
+		font-size: 1.5rem;
+		width: 100%;
+		border: none;
+		background: transparent;
+		font-weight: 600;
+		outline: none;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	#cycly-bikes .items {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	#cycly-bikes .filters {
+		grid-template-columns: 1fr;
+	}
+}
+
+
+/* ------ */
+/* Dialog */
+/* ------ */
+#cycly-bikes .dialog-wrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 100;
+	opacity: 0;
+	transition: opacity .3s ease-in-out;
+	cursor: pointer;
+
+	&.show {
+		display: block;
+		opacity: 1;
+	}
+}
+
+/* Close Button */
+#cycly-bikes .dialog .button-close {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 80px;
+	height: 80px;
+	padding: 20px;
+	flex-flow: column;
+	justify-content: center;
+	transition: all 0.2s ease-in-out;
+	outline: none;
+	cursor: pointer;
+
+	&:hover span {
+		background-color: #bf3d49;
+	}
+
+	span {
+		display: block;
+		background: #000;
+		height: 3px;
+		border-radius: 1px;
+		width: 100%;
+		transition: all 0.2s ease-in-out;
+		transform-origin: center;
+		transform: rotate(45deg) translateX(2px);
+
+		&:last-child {
+			transform: rotate(-45deg) translateX(2px);
+		}
+	}
+}
+
+/* Dialog Grundlayout*/
+#cycly-bikes .dialog {
+	background: #fff;
+	max-width: 110rem;
+	width: 100%;
+	position: fixed;
+	top: 2rem;
+	bottom: 2rem;
+	left: 50%;
+	transform: translate(-50%, 0);
+	overflow: auto;
+	display: block;
+	z-index: 1000;
+	box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
+	opacity: 0;
+	transition: opacity .3s ease-in-out;
+	padding: 4rem 5rem;
+	cursor: default;
+	font-size: 1.4rem;
+
+	&.show {
+		opacity: 1;
+	}
+
+	.vehicle-details {
+		display: grid;
+		grid-template-columns: 5fr 3fr;
+		grid-column-gap: 6rem;
+		grid-row-gap: 3rem;
+
+		.vehicle-infos {
+			.description-container {
+				margin-bottom: 3rem;
+			}
+
+			dl {
+				display: grid;
+				grid-template-columns: 2fr 5fr;
+				line-height: 1.8;
+				margin: 0;
+
+				dt {
+					color: #5e5e5e;
+					font-weight: 400;
+				}
+
+				dd {
+					color: #303030;
+					font-weight: 600;
+				}
+			}
+
+			.price {
+				font-weight: 800;
+				color: #ce2323;
+			}
+
+			.oldPrice {
+				text-decoration: line-through;
+			}
+		}
+
+		.vehicle-images {
+			.image-main {
+				position: relative;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background: rgba(0, 0, 0, 0.03);
+				}
+			}
+
+			.image-list {
+				margin-top: 10px;
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				grid-gap: 10px;
+			}
+		}
+	}
+
+	h2 {
+		margin: 0;
+		font-style: italic;
+		font-size: 4rem;
+		font-weight: 400;
+
+		strong {
+			font-weight: 800;
+		}
+
+		h3 {
+			margin: 0;
+			font-style: italic;
+			font-size: 1.8rem;
+			margin-bottom: 1rem;
+		}
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	#cycly-bikes .dialog {
+		top: 0;
+		bottom: 0;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	#cycly-bikes .dialog h2 {
+		max-width: calc(100% - 5rem);
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	#cycly-bikes .dialog .vehicle-details {
+		grid-template-columns: 1fr;
+		grid-gap: 1rem;
+	}
+}
+
+/* Kategorie*/
+#cycly-bikes .dialog .vehicle-category {
+	text-align: right;
+	align-self: end;
+	font-size: 1.3rem;
+
+	.label {
+		color: #aeaeae;
+	}
+
+	.value {
+		font-weight: 600;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	#cycly-bikes .dialog .vehicle-category {
+		text-align: left;
+	}
+}
