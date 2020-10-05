@@ -53,7 +53,7 @@ class CyclyBackend extends CyclySystem {
 
 		add_settings_field(
 			'cycly_url',
-			'API Url',
+			'URL',
 			function () {
 				echo HfCore\HtmlNode::input()->attr('name', 'cycly_url')->attr('type', 'text')->addClass('large')->value(get_option('cycly_url'));
 			},
@@ -63,7 +63,7 @@ class CyclyBackend extends CyclySystem {
 
 		add_settings_field(
 			'cycly_key',
-			'API Key',
+			'Öffentlicher Schlüssel',
 			function () {
 				echo HfCore\HtmlNode::input()->attr('name', 'cycly_key')->attr('type', 'text')->addClass('large')->value(get_option('cycly_key'));
 			},
@@ -73,7 +73,7 @@ class CyclyBackend extends CyclySystem {
 
 		add_settings_field(
 			'cycly_secret',
-			'API Secret',
+			'Geheimer Schlüssel',
 			function () {
 				echo HfCore\HtmlNode::input()->attr('name', 'cycly_secret')->attr('type', 'text')->addClass('large')->value(get_option('cycly_secret'));
 			},
