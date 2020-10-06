@@ -4,11 +4,14 @@ class CyclySystem extends HfCore\System {
 	public function __construct() {
 		parent::__construct();
 
-		HfCore\System::getInstance()->getCronjobController()->addCronjob('cycly-cronjob', [$this,'cleanTrash']);
+		HfCore\System::getInstance()->getCronjobController()->addCronjob('cycly-cronjob', [$this,'cleanCash']);
 		HfCore\System::getInstance()->addWidget('CyclyWidget');
 	}
 
-	public function cleanTrash() {
+	/**
+	 * Cashordner aufräumen
+	 */
+	public function cleanCash() {
 		foreach (\HfCore\IO::getFolder(HfCore\System::getInstance()->getPluginCachePath())->getFiles() as $file) {
 			if ($file->getLastChange() < HfCore\Time::goBack('P1D'))
 				$file->delete();
