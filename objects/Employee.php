@@ -26,7 +26,7 @@ class Employee extends Item {
 	public $lastname = '';
 
 	/**
-	 * Cache
+	 * Bild
 	 * @var Image
 	 */
 	public $image = null;

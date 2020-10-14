@@ -17,6 +17,11 @@ class CyclyFrontend extends CyclySystem {
 		HfCore\System::getInstance()->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
 	}
 
+	/**
+	 * WP-Tag Veloliste
+	 * @param $atts
+	 * @return string
+	 */
 	public function drawBikes($atts): string {
 		$body = HtmlNode::div()->id('cycly-bikes')->data('branch', isset($atts['branch']) ? $atts['branch'] : 1);
 
@@ -62,6 +67,11 @@ class CyclyFrontend extends CyclySystem {
 		return $body;
 	}
 
+	/**
+	 * WP-Tag Mitarbeiterliste
+	 * @param $atts
+	 * @return HtmlNode
+	 */
 	public function drawEmployees($atts) {
 		$body = HtmlNode::div()->id('cycly-employees')->data('branch', isset($atts['branch']) ? $atts['branch'] : 1);
 
@@ -75,7 +85,7 @@ class CyclyFrontend extends CyclySystem {
 	}
 
 	/**
-	 * WP-API aufruf
+	 * WP-API aufruf (Einzelnes Velo)
 	 * @param $data
 	 */
 	public function apiGetBike($data): void {
@@ -231,6 +241,10 @@ class CyclyFrontend extends CyclySystem {
 		echo $element;
 	}
 
+	/**
+	 * @param $id
+	 * @return \Cycly\Vehicle|null
+	 */
 	private function getVehicleById($id): ?\Cycly\Vehicle {
 		$item = new \Cycly\Vehicle();
 		$item->fromData(\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', $id]));
