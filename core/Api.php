@@ -4,7 +4,7 @@ namespace HfCore;
 class Api {
 	/**
 	 * Wordpress API Endpunkt hinzufügen
-	 * http://cycly-wp.ch.185-117-170-94.srv04.webpreview.ch/wp-json/pluginname/methodenname/12
+	 * Z.B. http://cycly-wp.ch.185-117-170-94.srv04.webpreview.ch/wp-json/pluginname/methodenname/12
 	 * @param $method methodenname/(?P<id>\d+)
 	 * @param $callback [$this,'methodenname']
 	 */

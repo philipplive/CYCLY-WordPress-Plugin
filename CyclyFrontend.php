@@ -11,6 +11,7 @@ class CyclyFrontend extends CyclySystem {
 
 		// Wordpress Tags erfassen
 		add_shortcode('show_bikes', [$this, 'drawBikes']);
+		add_shortcode('show_employees', [$this, 'drawEmployees']);
 
 		// Api Endpunkte
 		HfCore\System::getInstance()->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
@@ -61,7 +62,23 @@ class CyclyFrontend extends CyclySystem {
 		return $body;
 	}
 
-	function apiGetBike($data): void {
+	public function drawEmployees($atts) {
+		$body = HtmlNode::div()->id('cycly-employees')->data('branch', isset($atts['branch']) ? $atts['branch'] : 1);
+
+		foreach ($this->getEmployees(isset($atts['branch']) ? $atts['branch'] : 1) as $emplyee) {
+			$item = HtmlNode::div()->addClass('employee')->appendTo($body);
+			$item->append(HtmlNode::img()->attr('src', $emplyee->image->getUrlTiny())->attr('title', $emplyee->image->title));
+			$item->append(HtmlNode::p($emplyee->firstname.' '.$emplyee->lastname)->addClass('name'));
+		}
+
+		return $body;
+	}
+
+	/**
+	 * WP-API aufruf
+	 * @param $data
+	 */
+	public function apiGetBike($data): void {
 		$vehicle = $this->getVehicleById($data['id']);
 
 		$element = HtmlNode::div()
@@ -224,7 +241,7 @@ class CyclyFrontend extends CyclySystem {
 	/**
 	 * Fahrzeuge einer Geschäftsstelle
 	 * @param int $branchId
-	 * @return Vehicle[]
+	 * @return \Cycly\Vehicle[]
 	 */
 	private function getVehicles($branchId = 1): array {
 		$vehicles = [];
@@ -238,6 +255,26 @@ class CyclyFrontend extends CyclySystem {
 		return $vehicles;
 	}
 
+	/**
+	 * Mitarbeiter einer Geschäftsstelle
+	 * @param int $branchId
+	 * @return \Cycly\Employee[]
+	 */
+	private function getEmployees($branchId = 1): array {
+		$employees = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'employees', 'branch', $branchId]) as $data) {
+			$item = new \Cycly\Employee();
+			$item->fromData($data);
+			$employees[$data->id] = $item;
+		}
+
+		return $employees;
+	}
+
+	/**
+	 * @return \Cycly\VehicleCategory
+	 */
 	public function getVehicleCategoryById(int $id): \Cycly\VehicleCategory {
 		$categories = $this->getVehicleCategories();
 
@@ -265,7 +302,13 @@ class CyclyFrontend extends CyclySystem {
 		return $vehiclescategories;
 	}
 
-	private function generateFilter($name, $title, $options) {
+	/**
+	 * @param $name Html Name
+	 * @param $title Beschreibung
+	 * @param $options Einzelne Optionen [1=>'option']
+	 * @return HtmlNode
+	 */
+	private function generateFilter($name, $title, array $options) {
 		$select = HtmlNode::select()->attr('name', $name);
 
 		foreach ($options as $index => $option)

@@ -40,6 +40,7 @@ else {
 	require_once('objects/Image.php');
 	require_once('objects/VehicleCategory.php');
 	require_once('objects/Vehicle.php');
+	require_once('objects/Employee.php');
 	require_once('CyclyFrontend.php');
 	new CyclyFrontend();
 }

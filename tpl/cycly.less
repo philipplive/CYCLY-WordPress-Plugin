@@ -295,3 +295,24 @@
 		text-align: left;
 	}
 }
+
+/* Mitarbeiter */
+#cycly-employees {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	column-gap: 3rem;
+	row-gap: 6rem;
+
+	@media screen and (max-width: 800px) {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.employee {
+		text-align: center;
+		
+		img {
+			border-radius: 100rem;
+			display: inline-block;
+		}
+	}
+}

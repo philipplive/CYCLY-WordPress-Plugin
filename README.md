@@ -12,6 +12,7 @@ Um nun die Schnittstelle nutzen zu können, muss im Plugin die Schnittstelle kon
 ### Tags
 Folgende Tags werden aktuell angeboten:
 * [show_bikes branch="1"]
+* [show_employees="1"]
 
 ### Widgets
 Folgende Widgets werden aktuell angeboten:

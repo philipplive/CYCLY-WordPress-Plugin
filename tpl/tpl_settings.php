@@ -6,6 +6,7 @@
 			<p>Folgende Module können auf der Website eingebunden werden:</p>
 			<ul>
 				<li>- Veloliste direk in einem Beitrag: [show_bikes branch="1"]</li>
+				<li>- Veloliste direk in einem Beitrag: [show_employees branch="1"]</li>
 				<li>- Öffnungszeiten-Widget im Widget Bereich</li>
 			</ul>
 			<h2>Wichtig</h2>
