@@ -18,7 +18,6 @@
  * Author URI:      	https://optimanet.ch
  * License:          	Apache License (V2)
  *
- * @TODO				View für Mitarbeiter
  */
 
 if (!class_exists('HfCore\System')) {
