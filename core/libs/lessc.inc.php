@@ -15,7 +15,7 @@
  * The LESS compiler and parser.
  *
  * Converting LESS to CSS is a three stage process. The incoming file is parsed
- * by `lessc_parser` into a syntax tree, then it is compiled into another tree
+ * by `hf_lessc_parser` into a syntax tree, then it is compiled into another tree
  * representing the CSS structure by `lessc`. The CSS tree is fed into a
  * formatter, like `lessc_formatter` which then outputs CSS as a string.
  *
@@ -32,7 +32,7 @@
  * evaluation context, such as all available mixins and variables at any given
  * time.
  *
- * The `lessc_parser` class is only concerned with parsing its input.
+ * The `hf_lessc_parser` class is only concerned with parsing its input.
  *
  * The `lessc_formatter` takes a CSS tree, and dumps it to a formatted string,
  * handling things like indentation.
@@ -1961,7 +1961,7 @@ class lessc {
     // inject array of unparsed strings into environment as variables
     protected function injectVariables($args) {
         $this->pushEnv();
-        $parser = new lessc_parser($this, __METHOD__);
+        $parser = new hf_lessc_parser($this, __METHOD__);
         foreach ($args as $name => $strValue) {
             if ($name{0} !== '@') {
                 $name = '@' . $name;
@@ -2139,7 +2139,7 @@ class lessc {
     }
 
     protected function makeParser($name) {
-        $parser = new lessc_parser($this, $name);
+        $parser = new hf_lessc_parser($this, $name);
         $parser->writeComments = $this->preserveComments;
 
         return $parser;
@@ -2150,7 +2150,7 @@ class lessc {
     }
 
     protected function newFormatter() {
-        $className = "lessc_formatter_lessjs";
+        $className = "hf_lessc_formatter_lessjs";
         if (!empty($this->formatterName)) {
             if (!is_string($this->formatterName))
                 return $this->formatterName;
@@ -2377,7 +2377,7 @@ class lessc {
 
 // responsible for taking a string of LESS code and converting it into a
 // syntax tree
-class lessc_parser {
+class hf_lessc_parser {
     static protected $nextBlockId = 0; // used to uniquely identify blocks
 
     static protected $precedence = array(
@@ -3764,7 +3764,7 @@ class lessc_parser {
 
 }
 
-class lessc_formatter_classic {
+class hf_lessc_formatter_classic {
     public $indentChar = "  ";
 
     public $break = "\n";
@@ -3859,7 +3859,7 @@ class lessc_formatter_classic {
     }
 }
 
-class lessc_formatter_compressed extends lessc_formatter_classic {
+class hf_lessc_formatter_compressed extends hf_lessc_formatter_classic {
     public $disableSingle = true;
     public $open = "{";
     public $selectorSeparator = ",";
@@ -3872,7 +3872,7 @@ class lessc_formatter_compressed extends lessc_formatter_classic {
     }
 }
 
-class lessc_formatter_lessjs extends lessc_formatter_classic {
+class hf_lessc_formatter_lessjs extends hf_lessc_formatter_classic {
     public $disableSingle = true;
     public $breakSelectors = true;
     public $assignSeparator = ": ";
