@@ -21,7 +21,7 @@ class Template {
 		$fileOut = str_replace('/', '-', $file);
 		$fileOut = str_replace('.less', '.css', $fileOut);
 
-		$less = new \lessc();
+		$less = new \hf_lessc();
 		$less->checkedCompile(System::getInstance()->getPluginPath().$file, System::getInstance()->getPluginCachePath().$fileOut);
 
 		$this->cssFiles[] = $fileOut;
