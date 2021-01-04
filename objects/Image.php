@@ -37,7 +37,7 @@ class Image extends Item {
 	 * @return string
 	 */
 	public function getUrlFull(): string {
-		return $this->getResizedImageLink(1000, 1000);
+		return $this->getResizedImageLink(900, 900);
 	}
 
 	/**
@@ -63,15 +63,15 @@ class Image extends Item {
 	 * @param int $type
 	 * @return string|null
 	 */
-	public function getResizedImageLink(int $width, int $height, int $type = \HfCore\Image::RESIZE_MAX): string{
-		$name = 'vehicleimage-'.$this->id.'-'.$this->md5.'-'.$width.'-'.$height.'.png';
+	public function getResizedImageLink(int $width, int $height, int $type = \HfCore\Image::RESIZE_MAX): string {
+		$name = 'vehicleimage-'.$this->id.'-'.$this->md5.'-'.$width.'-'.$height.'.jpeg';
 
 		$file = \HfCore\IO::getFile(\HfCore\System::getInstance()->getPluginPath().'cache/'.$name);
 
 		if (!$file->exists()) {
 			$image = new \HfCore\Image($this->getFile()->getPath());
 			$image->resize($width, $height, $type);
-			$file->write($image->getString());
+			$file->write($image->getString(IMAGETYPE_JPEG, 80));
 		}
 
 		return \HfCore\System::getInstance()->getPluginCacheUrl().$name;
@@ -94,7 +94,7 @@ class Image extends Item {
 	 * @param \stdClass $data
 	 * @return $this
 	 */
-	public function fromData(\stdClass $data) {
+	public function fromData(\stdClass $data): self {
 		parent::fromData($data);
 		$this->id = $data->id;
 		$this->url = $data->url;

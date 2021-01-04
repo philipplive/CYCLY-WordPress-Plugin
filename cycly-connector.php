@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * CYCLY Connector
  *
@@ -12,7 +10,7 @@
  * Plugin Name:       	CYCLY Connector
  * Plugin URI:        	https://cycly.ch
  * Description:       	Ermöglicht das Einbinden von Daten aus CYCLY direkt auf Ihre Website.
- * Version:           	0.9.8.2
+ * Version:           	0.9.8.3
  * Requires at least: 	5.0
  * Requires PHP:     	7.4
  * Author:           	CYCLY (Optimanet Schweiz AG)
@@ -21,9 +19,11 @@
  *
  */
 
-if (!class_exists('HfCore\System')) {
+// HfCore
+if (!class_exists('HfCore\System'))
 	require_once('core/System.php');
-}
+
+// Projekt Cycly
 require_once('objects/Item.php');
 require_once('objects/Branch.php');
 require_once('objects/OpeningHours.php');
@@ -32,6 +32,7 @@ require_once('objects/OpeningHoursIrregular.php');
 require_once('CyclyApi.php');
 require_once('CyclySystem.php');
 
+// Frontend / Backend
 if (is_admin()) {
 	require_once('CyclyBackend.php');
 	new CyclyBackend();

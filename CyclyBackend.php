@@ -8,10 +8,14 @@ class CyclyBackend extends CyclySystem {
 		add_action('admin_init', [$this, 'adminInit']);
 
 		$this->getTemplateController()->addCssFile('tpl/backend.less');
+
+		// Api Endpunkte
+		// TODO Wie aufrufen? (welche URL für Endpunkt im Admin-Modus?)
+		HfCore\System::getInstance()->getApi()->addEndpoint('clearCache', [$this, 'cleanCache']);
 	}
 
 	/**
-	 * Hauptmenüeintrag
+	 * Eintrag im Hauptmenü
 	 */
 	public function addOptionPage() {
 		add_menu_page(

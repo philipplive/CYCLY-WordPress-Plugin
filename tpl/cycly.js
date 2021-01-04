@@ -2,8 +2,7 @@ class BikeModule {
 	constructor(element) {
 		// Elemente
 		this.element = element;
-		this.bikes = this.element.querySelectorAll('.items .item');
-		this.catagorie = this.element.querySelector('select[name=categorie]');
+		this.catagorieFilterElement = this.element.querySelector('select[name=categorie]');
 		this.bikes = this.element.querySelectorAll('.items .item');
 
 		// Dialog
@@ -17,10 +16,12 @@ class BikeModule {
 	}
 
 	init() {
-		this.catagorie.addEventListener('change', () => {
-			this.change();
+		// Filter Events
+		this.catagorieFilterElement.addEventListener('change', () => {
+			this.filterChangeEvent();
 		});
 
+		// Click Events
 		this.bikes.forEach((item) => {
 				item.querySelector('a').addEventListener('click', (event) => {
 					this.dialog.show();
@@ -37,14 +38,16 @@ class BikeModule {
 		);
 	}
 
-	change() {
+	// Event bei Filteränderung
+	filterChangeEvent() {
 		this.bikes.forEach((item) => {
 			item.classList.add('fadeout');
 		});
 
 		window.setTimeout(() => {
-			let categorieId = this.catagorie.value;
+			let categorieId = this.catagorieFilterElement.value;
 
+			// Bikes Filtern
 			this.bikes.forEach((item) => {
 				if (item.dataset.categoryid == categorieId || categorieId == 0)
 					item.style.display = 'block';
@@ -61,7 +64,7 @@ class BikeModule {
 	}
 }
 
-
+// Popup Dialog für Bikeanzeige
 class Dialog {
 	constructor(element) {
 		this.wrapper = element;
@@ -106,11 +109,11 @@ class Dialog {
 	}
 }
 
+// Start Event
 document.addEventListener("DOMContentLoaded", function () {
 	// Bikeanzeige
 	let bikeElement = document.getElementById('cycly-bikes');
 
-	if (bikeElement) {
+	if (bikeElement)
 		new BikeModule(bikeElement);
-	}
 });

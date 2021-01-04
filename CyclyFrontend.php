@@ -47,7 +47,7 @@ class CyclyFrontend extends CyclySystem {
 			$bike->append(HtmlNode::a($img)->addClass('image')->data('id', $vehicle->id));
 
 			if (count($vehicle->images))
-				$img->attr('src', $vehicle->images[0]->getResizedImageLink(600, 600))->attr('title', $vehicle->images[0]->title);
+				$img->attr('src', $vehicle->images[0]->getResizedImageLink(500, 500))->attr('title', $vehicle->images[0]->title);
 			else
 				$img->attr('src', $this->getPluginUrl().'/tpl/vehicle-empty.png')->attr('title', 'Kein Bild vorhanden');
 
@@ -132,7 +132,6 @@ class CyclyFrontend extends CyclySystem {
 
 		if (!count($vehicle->images))
 			$imageMain->append(HtmlNode::img()->attr('src', '/wp-content/plugins/cycly-connector/tpl/vehicle-empty.png')->attr('title', 'Kein Bild vorhanden'));
-		//$imageMain->addClass('noimage');
 
 		$infos = HtmlNode::div()
 			->addClass('vehicle-infos')
@@ -319,7 +318,7 @@ class CyclyFrontend extends CyclySystem {
 	/**
 	 * @param $name Html Name
 	 * @param $title Beschreibung
-	 * @param $options Einzelne Optionen [1=>'option']
+	 * @param $options Einzelne Optionen [1 => 'option']
 	 * @return HtmlNode
 	 */
 	private function generateFilter($name, $title, array $options) {

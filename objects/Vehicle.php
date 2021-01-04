@@ -31,6 +31,12 @@ class Vehicle extends Item {
 	public $type = '';
 
 	/**
+	 * Type als Int
+	 * @var int
+	 */
+	public $typeId = 0;
+
+	/**
 	 * Kategorie als String
 	 * @var string
 	 */
@@ -214,6 +220,7 @@ class Vehicle extends Item {
 		$this->model = $data->model;
 		$this->manufacturer = $data->manufacturer;
 		$this->type = $data->type;
+		//$this->typeId = $data->typeId;
 		$this->category = $data->category;
 		$this->categoryId = $data->categoryId;
 		$this->year = $data->year;
