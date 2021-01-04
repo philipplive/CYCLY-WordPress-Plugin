@@ -71,7 +71,7 @@ class Image extends Item {
 		if (!$file->exists()) {
 			$image = new \HfCore\Image($this->getFile()->getPath());
 			$image->resize($width, $height, $type);
-			$file->write($image->getString(IMAGETYPE_JPEG, 80));
+			$file->write($image->getString(IMAGETYPE_JPEG, 75));
 		}
 
 		return \HfCore\System::getInstance()->getPluginCacheUrl().$name;
