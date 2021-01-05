@@ -7,14 +7,14 @@ class CyclyFrontend extends CyclySystem {
 	public function __construct() {
 		parent::__construct();
 
-		$this->getTemplateController()->addCssFile('tpl/cycly.less')->addJsFile('tpl/cycly.js');
+		$this->getTemplateController()->addCssFile('tpl/cycly.less');
 
 		// Wordpress Tags erfassen
 		add_shortcode('show_bikes', [$this, 'drawBikes']);
 		add_shortcode('show_employees', [$this, 'drawEmployees']);
 
 		// Api Endpunkte
-		HfCore\System::getInstance()->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
+		$this->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
 	}
 
 	/**

@@ -1,9 +1,15 @@
 'use strict';
 
 class HfCore {
+	/**
+	 * Request an Endpunkt
+	 * @param method
+	 * @param parameters
+	 * @returns {Promise<Response>}
+	 */
 	static request(method = '', parameters = {}) {
 		return fetch('/wp-json/' + method, {
-			method: 'POST', // or 'PUT'
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},

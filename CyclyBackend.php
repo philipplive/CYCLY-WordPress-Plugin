@@ -11,7 +11,7 @@ class CyclyBackend extends CyclySystem {
 
 		// Api Endpunkte
 		// TODO Wie aufrufen? (welche URL für Endpunkt im Admin-Modus?)
-		HfCore\System::getInstance()->getApi()->addEndpoint('clearCache', [$this, 'cleanCache']);
+		$this->getApi()->addEndpoint('clearCache', [$this, 'cleanCache']);
 	}
 
 	/**
