@@ -19,5 +19,16 @@
 			   value="Einstellungen speichern"
 			   class="button button-primary"/>
 	</form>
+
+	<hr>
+	<h2>Weiteres...</h2>
 	<?php do_settings_sections('cylcy_debug'); ?>
+
+	<p>Cache sofort leeren (wird ansonsten automatisch jede Woche geleert)</p>
+	<form action="" method="post">
+		<input name="Submit" type="submit"
+			   value="Cache leeren"
+			   onclick="HfCore.request('cycly-connector/cleancache');"
+			   class="button button-primary"/>
+	</form>
 </div>

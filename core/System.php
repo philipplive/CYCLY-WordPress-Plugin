@@ -134,4 +134,34 @@ class System {
 	public function getPluginUrl(): string {
 		return get_site_url().'/wp-content/plugins/'.$this->getPluginName().'/';
 	}
+
+	/**
+	 * Aktuelle BenutzerID
+	 * @return int
+	 * @throws \Exception
+	 */
+	public function getCurrentUserId(): int {
+		$userId = wp_validate_logged_in_cookie(false);
+
+		if ($userId === false)
+			throw new \Exception('User nicht eingeloggt');
+
+		return $userId;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAdmin(): bool {
+		try {
+			$user = get_userdata($this->getCurrentUserId());
+
+			if (in_array('administrator', $user->roles))
+				return true;
+		} catch (\Exception $ex) {
+			// Nicht eingeloggt
+		}
+
+		return false;
+	}
 }
