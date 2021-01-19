@@ -43,7 +43,7 @@ class CyclyApi {
 	 * @param int $maxAge in Sekunden
 	 * @return mixed
 	 */
-	public static function cacheRequest($method = 'account', string $type = 'GET', array $data = [], int $maxAge = 1) {
+	public static function cacheRequest($method = 'account', string $type = 'GET', array $data = [], int $maxAge = 600) {
 		$identifier = [];
 		$identifier[] = is_array($method) ? implode('/', $method) : $method;
 		$identifier[] = $type;

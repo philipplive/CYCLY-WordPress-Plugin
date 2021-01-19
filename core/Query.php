@@ -6,13 +6,17 @@
 class Query {
 	/**
 	 * Parameter aus Array lesen
-	 * @param array|null $data Array
+	 * @param array $data Array
 	 * @param string $index Index
 	 * @param string $type Variablentyp (HFCore\T_STR, HFCore\T_BOOL, HFCore\T_INT, HFCore\T_ARR)
 	 * @param mixed $default Standardwert, falls nicht gesetzt
 	 * @return mixed
 	 */
-	public static function param(?array $data, string $index, string $type = HFCore\T_STR, $default = null) {
+	public static function param($data, string $index, string $type = HFCore\T_STR, $default = null) {
+		// WP Fix, da leere Paramater ein string anstelle eines Arrays sind...
+		if(!is_array($data))
+			$data = [];
+
 		switch ($type) {
 			case HFCore\T_BOOL:
 				return isset($data[$index]) ? ($data[$index] == '1' || $data[$index] == 'true') : (($default !== null) ? $default : false);
