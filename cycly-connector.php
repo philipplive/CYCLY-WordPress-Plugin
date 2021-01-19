@@ -12,7 +12,7 @@
  * Description:       	Ermöglicht das Einbinden von Daten aus CYCLY direkt auf Ihre Website.
  * Version:           	0.9.8.3
  * Requires at least: 	5.0
- * Requires PHP:     	7.4
+ * Requires PHP:     	7.3
  * Author:           	CYCLY (Optimanet Schweiz AG)
  * Author URI:      	https://optimanet.ch
  * License:          	Apache License (V2)

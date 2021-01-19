@@ -8,10 +8,6 @@ class CyclyBackend extends CyclySystem {
 		add_action('admin_init', [$this, 'adminInit']);
 
 		$this->getTemplateController()->addCssFile('tpl/backend.less');
-
-		// Api Endpunkte
-		// TODO Wie aufrufen? (welche URL für Endpunkt im Admin-Modus?)
-		$this->getApi()->addEndpoint('clearCache', [$this, 'cleanCache']);
 	}
 
 	/**
@@ -31,20 +27,7 @@ class CyclyBackend extends CyclySystem {
 	}
 
 	public function adminInit() {
-		add_settings_section(
-			'cylcy_debug',
-			'',
-			function () {
-				echo '
-				<div class="card" style="opacity: 0.5;">
-				<h3>Debug</h3>
-					<p>Files im Cache: '.count(\HfCore\IO::getFolder(\HfCore\System::getInstance()->getPluginCachePath())->getFiles()).'</p>
-				</div>
-				';
-			},
-			'cylcy_debug'
-		);
-
+		// Einstellungen API
 		add_settings_section(
 			'cylcy_settings_section',
 			'API Einstellungen',
@@ -88,5 +71,42 @@ class CyclyBackend extends CyclySystem {
 		register_setting('cylcy_settings', 'cycly_key');
 		register_setting('cylcy_settings', 'cycly_secret');
 		register_setting('cylcy_settings', 'cycly_url');
+
+		// Erweiterte Einstellungen
+		add_settings_section(
+			'cylcy_settings_more_section',
+			'Einstellungen',
+			function () {
+				echo HfCore\HtmlNode::p('Anwendungsspezifisch Einstellungen');
+			},
+			'cylcy_settings_more'
+		);
+
+		add_settings_field(
+			'cycly_hide_vehicle_without_image',
+			'Fahrzeuge ohne Bild ausblenden',
+			function () {
+				echo HfCore\HtmlNode::input()->attr('name', 'cycly_hide_vehicle_without_image')->attr('type', 'checkbox')->attr('checked', get_option('cycly_hide_vehicle_without_image') ? true : null);
+			},
+			'cylcy_settings_more',
+			'cylcy_settings_more_section'
+		);
+
+		register_setting('cylcy_settings_more', 'cycly_hide_vehicle_without_image');
+
+		// Debug
+		add_settings_section(
+			'cylcy_debug',
+			'',
+			function () {
+				echo '
+				<div class="card" style="opacity: 0.5;">
+				<h3>Debug</h3>
+					<p>Files im Cache: '.count(\HfCore\IO::getFolder(\HfCore\System::getInstance()->getPluginCachePath())->getFiles()).'</p>
+				</div>
+				';
+			},
+			'cylcy_debug'
+		);
 	}
 }

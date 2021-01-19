@@ -24,7 +24,11 @@ class CyclyWidget extends WP_Widget {
 			echo $before_title.$title.$after_title;
 		}
 
-		echo $this->drawOpeningHours($instance['branch']);
+		try {
+			echo $this->drawOpeningHours($instance['branch']);
+		}catch (\Exception $ex){
+			echo "Keine Öffnungezeiten hinterlegt";
+		}
 
 		echo $after_widget;
 	}

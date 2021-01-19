@@ -17,7 +17,7 @@ class CyclySystem extends HfCore\System {
 	 */
 	public function cleanCacheForce(){
 		if(!$this->isAdmin())
-			throw new Exception('',403);
+			throw new Exception('Kein Zugriff',403);
 
 		$this->cleanCache('P0D');
 	}

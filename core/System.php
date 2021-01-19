@@ -12,7 +12,15 @@ class System {
 		if (isset(self::$instance))
 			throw new Exception('System-Instanz existiert bereits');
 
+		// Datentypen
+		define('HFCore\T_BOOL', 'b');
+		define('HFCore\T_INT', 'i');
+		define('HFCore\T_DOUBLE', 'd');
+		define('HFCore\T_STR', 's');
+		define('HFCore\T_ARR', 'a');
+
 		// Core-Klassen laden
+		require_once('Query.php');
 		require_once('Price.php');
 		require_once('Time.php');
 		require_once('Image.php');

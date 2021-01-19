@@ -10,8 +10,8 @@ class CyclyFrontend extends CyclySystem {
 		$this->getTemplateController()->addCssFile('tpl/cycly.less');
 
 		// Wordpress Tags erfassen
-		add_shortcode('show_bikes', [$this, 'drawBikes']);
-		add_shortcode('show_employees', [$this, 'drawEmployees']);
+		add_shortcode('show_bikes', [$this, 'drawBikes']); // Veloübersicht
+		add_shortcode('show_employees', [$this, 'drawEmployees']); // Mitarbeiterübersicht
 
 		// Api Endpunkte
 		$this->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
@@ -19,11 +19,11 @@ class CyclyFrontend extends CyclySystem {
 
 	/**
 	 * WP-Tag Veloliste
-	 * @param $atts
+	 * @param $atts ['branch']
 	 * @return string
 	 */
 	public function drawBikes($atts): string {
-		$body = HtmlNode::div()->id('cycly-bikes')->data('branch', isset($atts['branch']) ? $atts['branch'] : 1);
+		$body = HtmlNode::div()->id('cycly-bikes')->data('branch', Query::param($atts, 'branch', HfCore\T_INT, 1));
 
 		// Filter
 		$fitlers = HtmlNode::div()->appendTo($body)->addClass('filters');
@@ -262,6 +262,11 @@ class CyclyFrontend extends CyclySystem {
 		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'branch', $branchId]) as $data) {
 			$item = new \Cycly\Vehicle();
 			$item->fromData($data);
+
+			// Filter für "Velos ohne Bild"
+			if(get_option('cycly_hide_vehicle_without_image') && empty($item->images))
+				continue;
+
 			$vehicles[$item->id] = $item;
 		}
 
