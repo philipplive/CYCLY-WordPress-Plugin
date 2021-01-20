@@ -41,7 +41,7 @@ class CyclyFrontend extends CyclySystem {
 		$items = HtmlNode::div()->addClass('items')->appendTo($body);
 
 		foreach ($vehicles as $vehicle) {
-			$bike = HtmlNode::div()->addClass('item')->data('categoryid', $vehicle->categoryId)->style('display: block;');
+			$bike = HtmlNode::div()->addClass('item')->data('categoryid', $vehicle->categoryId)->style('display: none;');
 
 			$img = HtmlNode::img();
 			$bike->append(HtmlNode::a($img)->addClass('image')->data('id', $vehicle->id));
@@ -56,6 +56,9 @@ class CyclyFrontend extends CyclySystem {
 
 			$items->append($bike);
 		}
+
+		// Mehr anzeigen Button
+		HtmlNode::div('Mehr anzeigen')->addClass('moreButton')->appendTo($body);
 
 		// Dialog
 		$close = HtmlNode::a(HtmlNode::span(), HtmlNode::span())->addClass('button-close');

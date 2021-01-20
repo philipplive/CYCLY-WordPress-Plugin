@@ -5,6 +5,7 @@
 
 #cycly-bikes {
 	margin-bottom: 0;
+	text-align: center;
 
 	.items {
 		display: grid;
@@ -29,9 +30,9 @@
 			}
 
 			.image {
-				border-bottom: 0.5rem solid #666666;
 				height: 15rem;
 				background-color: #fff;
+				margin-bottom:1rem;
 
 				display: block;
 				align-items: center;
@@ -40,9 +41,22 @@
 					display: inline-block;
 					max-width: 100%;
 					max-height: 100%;
-					padding: 1rem;
 				}
 			}
+		}
+	}
+
+	.moreButton {
+		background-color: #5e5e5e;
+		color: #fff;
+		display: inline-block;
+		padding: 0.8rem 2rem ;
+		border-radius: 0.3rem;
+		font-size: 1.5rem;
+		cursor: pointer;
+
+		&:hover {
+			background-color: #333;
 		}
 	}
 
@@ -148,8 +162,9 @@
 
 /* Dialog Grundlayout*/
 #cycly-bikes .dialog {
+	text-align: left;
 	background: #fff;
-	max-width: 110rem;
+	max-width: 100rem;
 	width: 100%;
 	position: fixed;
 	top: 6rem;
@@ -183,7 +198,7 @@
 
 			dl {
 				display: grid;
-				grid-template-columns: 2fr 5fr;
+				grid-template-columns: 3fr 5fr;
 				line-height: 1.8;
 				margin: 0;
 
@@ -214,17 +229,6 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				padding: 1rem;
-
-				&::after {
-					content: '';
-					position: absolute;
-					top: 0;
-					left: 0;
-					right: 0;
-					bottom: 0;
-					background: rgba(0, 0, 0, 0.03);
-				}
 			}
 
 			.image-list {
@@ -245,13 +249,13 @@
 		strong {
 			font-weight: 800;
 		}
+	}
 
-		h3 {
-			margin: 0;
-			font-style: italic;
-			font-size: 1.8rem;
-			margin-bottom: 1rem;
-		}
+	h3 {
+		margin: 0;
+		font-style: italic;
+		font-size: 1.8rem;
+		margin-bottom: 1rem;
 	}
 }
 
