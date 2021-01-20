@@ -94,6 +94,19 @@ class CyclyBackend extends CyclySystem {
 
 		register_setting('cylcy_settings_more', 'cycly_hide_vehicle_without_image');
 
+		add_settings_field(
+			'cycly_cache_age',
+			'Cachedauer (in Stunden)',
+			function () {
+				echo HfCore\HtmlNode::input()->attr('name', 'cycly_cache_age')->attr('type', 'number')->attr('min','1')->attr('step','1')->addClass('large')->value(get_option('cycly_cache_age') ? get_option('cycly_cache_age') : '1');
+			},
+			'cylcy_settings_more',
+			'cylcy_settings_more_section'
+		);
+
+		register_setting('cylcy_settings_more', 'cycly_cache_age');
+		register_setting('cylcy_settings_more', 'cycly_hide_vehicle_without_image');
+
 		// Debug
 		add_settings_section(
 			'cylcy_debug',
