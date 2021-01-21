@@ -9,13 +9,13 @@
 
 	.items {
 		display: grid;
-		margin: 4rem 0;
+		margin: 40px 0;
 		grid-template-columns: 1fr 1fr;
-		grid-gap: 2rem;
-		grid-row-gap: 4rem;
+		grid-gap: 20px;
+		grid-row-gap: 40px;
 
 		.item {
-			font-size: 1.5rem;
+			font-size: 16px;
 			text-align: center;
 			transition: all 0.2s ease-in-out;
 			opacity: 1;
@@ -26,15 +26,16 @@
 			}
 
 			.title strong {
-				padding-right: 1rem;
+				padding-right: 10px;
 			}
 
 			.image {
-				height: 15rem;
+				height: 150px;
 				background-color: #fff;
-				margin-bottom:1rem;
+				margin-bottom:10px;
 
-				display: block;
+				display: flex;
+				justify-content: center;
 				align-items: center;
 
 				img {
@@ -50,9 +51,9 @@
 		background-color: #5e5e5e;
 		color: #fff;
 		display: inline-block;
-		padding: 0.8rem 2rem ;
-		border-radius: 0.3rem;
-		font-size: 1.5rem;
+		padding: 8px 20px ;
+		border-radius: 0.30px;
+		font-size: 16px;
 		cursor: pointer;
 
 		&:hover {
@@ -63,7 +64,7 @@
 	.filters {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-gap: 1rem;
+		grid-gap: 10px;
 		white-space: nowrap;
 
 	}
@@ -72,16 +73,16 @@
 		background: #fff;
 		border: 1px solid #e2e2e2;
 		border-radius: 26px;
-		padding: 1rem 2rem;
+		padding: 10px 20px;
 		flex-flow: row;
 		justify-content: stretch;
 		align-items: stretch;
 		display: flex;
-		font-size: 1.5rem;
+		font-size: 16px;
 	}
 
 	select {
-		font-size: 1.5rem;
+		font-size: 16px;
 		width: 100%;
 		border: none;
 		background: transparent;
@@ -164,11 +165,11 @@
 #cycly-bikes .dialog {
 	text-align: left;
 	background: #fff;
-	max-width: 100rem;
+	max-width: 1000px;
 	width: 100%;
 	position: fixed;
-	top: 6rem;
-	bottom: 6rem;
+	top: 100px;
+	bottom: 100px;
 	left: 50%;
 	transform: translate(-50%, 0);
 	overflow: auto;
@@ -177,9 +178,9 @@
 	box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
 	opacity: 0;
 	transition: opacity .3s ease-in-out;
-	padding: 4rem 5rem;
+	padding: 40px 50px;
 	cursor: default;
-	font-size: 1.4rem;
+	font-size: 16px;
 
 	&.show {
 		opacity: 1;
@@ -188,12 +189,12 @@
 	.vehicle-details {
 		display: grid;
 		grid-template-columns: 5fr 3fr;
-		grid-column-gap: 6rem;
-		grid-row-gap: 3rem;
+		grid-column-gap: 60px;
+		grid-row-gap: 30px;
 
 		.vehicle-infos {
 			.description-container {
-				margin-bottom: 3rem;
+				margin-bottom: 30px;
 			}
 
 			dl {
@@ -243,7 +244,7 @@
 	h2 {
 		margin: 0;
 		font-style: italic;
-		font-size: 4rem;
+		font-size: 30px;
 		font-weight: 400;
 
 		strong {
@@ -254,8 +255,8 @@
 	h3 {
 		margin: 0;
 		font-style: italic;
-		font-size: 1.8rem;
-		margin-bottom: 1rem;
+		font-size: 18px;
+		margin-bottom: 10px;
 	}
 }
 
@@ -268,14 +269,14 @@
 
 @media screen and (max-width: 1100px) {
 	#cycly-bikes .dialog h2 {
-		max-width: calc(100% - 5rem);
+		max-width: calc(100% - 50px);
 	}
 }
 
 @media screen and (max-width: 1100px) {
 	#cycly-bikes .dialog .vehicle-details {
 		grid-template-columns: 1fr;
-		grid-gap: 1rem;
+		grid-gap: 10px;
 	}
 }
 
@@ -283,7 +284,7 @@
 #cycly-bikes .dialog .vehicle-category {
 	text-align: right;
 	align-self: end;
-	font-size: 1.3rem;
+	font-size: 1.30px;
 
 	.label {
 		color: #aeaeae;
@@ -304,8 +305,8 @@
 #cycly-employees {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	column-gap: 3rem;
-	row-gap: 6rem;
+	column-gap: 30px;
+	row-gap: 60px;
 
 	@media screen and (max-width: 800px) {
 		grid-template-columns: 1fr 1fr;
@@ -313,9 +314,9 @@
 
 	.employee {
 		text-align: center;
-		
+
 		img {
-			border-radius: 100rem;
+			border-radius: 1000px;
 			display: inline-block;
 		}
 	}
