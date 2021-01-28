@@ -10,9 +10,14 @@
 	.items {
 		display: grid;
 		margin: 40px 0;
+		transition: all 0.2s ease-in-out;
 		grid-template-columns: 1fr 1fr;
 		grid-gap: 20px;
 		grid-row-gap: 40px;
+
+		&.fadeout {
+			opacity: 0;
+		}
 
 		.item {
 			font-size: 16px;

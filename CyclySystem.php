@@ -5,7 +5,6 @@ class CyclySystem extends HfCore\System {
 		parent::__construct();
 
 		$this->getCronjobController()->addCronjob('cycly-cronjob', [$this, 'cleanCache']);
-		$this->getTemplateController()->addJsFile('tpl/cycly.js');
 		$this->addWidget('CyclyWidget');
 
 		// Api Endpunkte

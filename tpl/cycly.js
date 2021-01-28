@@ -3,7 +3,9 @@ class BikeModule {
 		// Elemente
 		this.element = element;
 		this.catagorieFilterElement = this.element.querySelector('select[name=categorie]');
-		this.bikes = this.element.querySelectorAll('.items .item');
+		this.sortFilterElement = this.element.querySelector('select[name=sort]');
+		this.bikesContainer = this.element.querySelector('.items');
+		this.bikes = [].slice.call(this.element.querySelectorAll('.items .item'));
 		this.moreButton = this.element.querySelector('.moreButton')
 
 		// Dialog
@@ -20,13 +22,26 @@ class BikeModule {
 		this.init();
 
 		// Filter
-		this.categorieId = 0;
+		this.SORT = {
+			PRICE_DESC: 1, // Absteigend
+			PRICE_ASC: 2, // Aufsteigend
+			YEAR_DESC: 3,
+			YEAR_ASC: 4,
+		};
+
+		this.sort = this.sortFilterElement.value;
+		this.categorieId = this.catagorieFilterElement.value;
 	}
 
 	init() {
 		// Filter Events
 		this.catagorieFilterElement.addEventListener('change', () => {
 			this.categorieId = this.catagorieFilterElement.value;
+			this.filterChangeEvent();
+		});
+
+		this.sortFilterElement.addEventListener('change', () => {
+			this.sort = this.sortFilterElement.value;
 			this.filterChangeEvent();
 		});
 
@@ -65,40 +80,66 @@ class BikeModule {
 	hideMoreButton() {
 		this.showMore = true;
 		this.moreButton.style.display = 'none';
-		console.log('hide');
 	}
 
 	// Mehr Button anzeigen
 	showMoreButton() {
 		this.showMore = false;
 		this.moreButton.style.display = 'inline-block';
-		console.log('show');
 	}
 
 	// Event bei Filteränderung
 	filterChangeEvent() {
 		this.showMore = false;
 
-		this.bikes.forEach((item) => {
-			item.classList.add('fadeout');
-		});
+		this.bikesContainer.classList.add('fadeout');
 
 		window.setTimeout(() => {
 			this.filter();
 
 			window.setTimeout(() => {
-				this.bikes.forEach((item) => {
-					item.classList.remove('fadeout');
-				});
+				this.bikesContainer.classList.remove('fadeout');
 			}, 10);
 		}, 200);
 	}
 
-	// Filter anwenden
+	// Filter anwenden und Bikeliste neu zeichnen
 	filter(categorieId) {
 		let count = 0;
 		let countOffset = 0;
 
+		this.bikesContainer.innerHTML = '';
+
+		// Sortiere alle Elemente
+		this.bikes.sort((a, b) => {
+			let result = 0;
+			let val1, val2;
+
+			if (this.sort == this.SORT.YEAR_ASC || this.sort == this.SORT.YEAR_DESC) {
+				val1 = parseInt(a.dataset.year);
+				val2 = parseInt(b.dataset.year);
+			}
+
+			if (this.sort == this.SORT.PRICE_ASC || this.sort == this.SORT.PRICE_DESC) {
+				val1 = parseInt(a.dataset.price);
+				val2 = parseInt(b.dataset.price);
+			}
+
+			if (val1 > val2)
+				result = 1;
+			else if (val1 == val2)
+				result = 0;
+			else
+				result = -1;
+
+			// Reihenfolge umkehren
+			if(this.sort % 2)
+				result *= -1;
+
+			return result;
+		});
+
+		// Filter (anzeigen/ausblenden)
 		this.bikes.forEach((item) => {
 				let show = false;
 
@@ -112,12 +153,11 @@ class BikeModule {
 					countOffset++;
 				}
 
-				// Anzeigen/Ausblenden
+				// Hinzufügen
 				if (show) {
-					item.style.display = 'block';
+					this.bikesContainer.appendChild(item);
 					count++;
-				} else
-					item.style.display = 'none';
+				}
 			}
 		);
 

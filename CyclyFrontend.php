@@ -8,6 +8,7 @@ class CyclyFrontend extends CyclySystem {
 		parent::__construct();
 
 		$this->getTemplateController()->addCssFile('tpl/cycly.less');
+		$this->getTemplateController()->addJsFile('tpl/cycly.js');
 
 		// Wordpress Tags erfassen
 		add_shortcode('show_bikes', [$this, 'drawBikes']); // Veloübersicht
@@ -23,7 +24,10 @@ class CyclyFrontend extends CyclySystem {
 	 * @return string
 	 */
 	public function drawBikes($atts): string {
-		$body = HtmlNode::div()->id('cycly-bikes')->data('branch', Query::param($atts, 'branch', HfCore\T_INT, 1));
+		// Body
+		$body = HtmlNode::div()->id('cycly-bikes')
+			->data('branch', Query::param($atts, 'branch', HfCore\T_INT, 1))
+			->data('sort', Query::param($atts, 'sort', HfCore\T_INT, 2));
 
 		// Filter
 		$fitlers = HtmlNode::div()->appendTo($body)->addClass('filters');
@@ -35,13 +39,20 @@ class CyclyFrontend extends CyclySystem {
 		}
 
 		$fitlers->append($this->generateFilter('categorie', 'Kategorie', $cagetorieOptions));
+		$fitlers->append($this->generateFilter('sort', 'Sortieren', [2 => 'Preis', 1 => 'Preis absteigend', 4 => 'Jahrgang', 3 => 'Jahrgang absteigend']));
+
 
 		// Vehicles
-		$vehicles = $this->getVehicles(isset($atts['branch']) ? $atts['branch'] : 1);
+		$vehicles = $this->getVehicles(Query::param($atts, 'branch', HfCore\T_INT, 1));
 		$items = HtmlNode::div()->addClass('items')->appendTo($body);
 
 		foreach ($vehicles as $vehicle) {
-			$bike = HtmlNode::div()->addClass('item')->data('categoryid', $vehicle->categoryId)->style('display: none;');
+			$bike = HtmlNode::div()
+				->addClass('item')
+				->data('categoryid', $vehicle->categoryId)
+				->data('typeId', $vehicle->typeId)
+				->data('year', $vehicle->year)
+				->data('price', (int)$vehicle->price);
 
 			$img = HtmlNode::img();
 			$bike->append(HtmlNode::a($img)->addClass('image')->data('id', $vehicle->id));
@@ -267,7 +278,7 @@ class CyclyFrontend extends CyclySystem {
 			$item->fromData($data);
 
 			// Filter für "Velos ohne Bild"
-			if(get_option('cycly_hide_vehicle_without_image') && empty($item->images))
+			if (get_option('cycly_hide_vehicle_without_image') && empty($item->images))
 				continue;
 
 			$vehicles[$item->id] = $item;
@@ -326,7 +337,7 @@ class CyclyFrontend extends CyclySystem {
 	/**
 	 * @return \Cycly\VehicleType[]
 	 */
-	private function getVehicleTypes() : array {
+	private function getVehicleTypes(): array {
 		$this->items = [];
 
 		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'types']) as $data) {
