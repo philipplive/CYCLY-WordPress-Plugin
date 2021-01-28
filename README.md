@@ -1,4 +1,5 @@
 # CYCLY WordPress Plugin
+![cycly logo](./tpl/cycly-header.jpg)
 
 Mit diesem Plugin können Daten direkt aus [CYCLY](https://cycly.ch/) auf eine WordPress Website eingebunden werden.
 

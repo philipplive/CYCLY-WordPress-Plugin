@@ -309,18 +309,33 @@ class CyclyFrontend extends CyclySystem {
 	 * @return \Cycly\VehicleCategory[]
 	 */
 	private function getVehicleCategories(): array {
-		$this->vehiclescategories = [];
+		$items = [];
 
 		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'categories']) as $data) {
 			$item = new \Cycly\VehicleCategory();
 			$item->fromData($data);
-			$vehiclescategories[$item->id] = $item;
+			$items[$item->id] = $item;
 		}
 
 		foreach ($this->getVehicles() as $vehicle)
-			$vehiclescategories[$vehicle->categoryId]->count++;
+			$items[$vehicle->categoryId]->count++;
 
-		return $vehiclescategories;
+		return $items;
+	}
+
+	/**
+	 * @return \Cycly\VehicleType[]
+	 */
+	private function getVehicleTypes() : array {
+		$this->items = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'types']) as $data) {
+			$item = new \Cycly\VehicleType();
+			$item->fromData($data);
+			$items[$item->id] = $item;
+		}
+
+		return $items;
 	}
 
 	/**
