@@ -20,37 +20,76 @@ class CyclyFrontend extends CyclySystem {
 
 	/**
 	 * WP-Tag Veloliste
-	 * @param $atts ['branch']
+	 * @param $atts ['branch', 'categories','manufacturers','sort']
 	 * @return string
 	 */
 	public function drawBikes($atts): string {
-		// Body
-		$body = HtmlNode::div()->id('cycly-bikes')
-			->data('branch', Query::param($atts, 'branch', HfCore\T_INT, 1))
-			->data('sort', Query::param($atts, 'sort', HfCore\T_INT, 2));
+		// Geschäftsstelle
+		$branch = Query::param($atts, 'branch', HfCore\T_INT, 1);
 
-		// Filter
-		$fitlers = HtmlNode::div()->appendTo($body)->addClass('filters');
+		// Verfügbare Fahrzeuge
+		$vehicles = new VehicleSet($branch);
 
-		$cagetorieOptions = [0 => 'Alle'];
-		foreach ($this->getVehicleCategories() as $category) {
-			if ($category->count)
-				$cagetorieOptions[$category->id] = $category->title;
+		/**
+		$mFilter = new VehicleFilter($vehicles, 'manufacturerId', $this->getManufactures($branch), 'Hersteller');
+		$cFilter = new VehicleFilter($vehicles, 'categoryId', $this->getVehicleCategories($branch), 'Kategorie');
+
+		if (!empty(Query::param($atts, 'manufacturers', HfCore\T_STR, ''))) {
+			$mFilter->reduceOptions(explode(',', str_replace(' ', '', Query::param($atts, 'manufacturers', HfCore\T_STR))));
 		}
 
-		$fitlers->append($this->generateFilter('categorie', 'Kategorie', $cagetorieOptions));
-		$fitlers->append($this->generateFilter('sort', 'Sortieren', [2 => 'Preis', 1 => 'Preis absteigend', 4 => 'Jahrgang', 3 => 'Jahrgang absteigend']));
+		if (!empty(Query::param($atts, 'categories', HfCore\T_STR, ''))) {
+			$cFilter->reduceOptions(explode(',', str_replace(' ', '', Query::param($atts, 'categories', HfCore\T_STR))));
+		}*/
 
+		// Body
+		$body = HtmlNode::div()->addClass('cycly-vehicles');
+
+		// Vergüfbare Hersteller
+		$manufacturers = [];
+
+		if (!empty(Query::param($atts, 'manufacturers', HfCore\T_STR, ''))) {
+			foreach (explode(',', str_replace(' ', '', Query::param($atts, 'manufacturers', HfCore\T_STR))) as $item) {
+				foreach ($this->getManufactures($branch) as $key => $manufacturer) {
+					if ($key == $item)
+						$manufacturers[$key] = $manufacturer;
+				}
+			}
+		}
+		else {
+			$manufacturers = $this->getManufactures($branch);
+		}
+
+		// Verfügbare Kategorien
+		$categories = [];
+
+		if (!empty(Query::param($atts, 'categories', HfCore\T_STR, ''))) {
+			foreach (explode(',', str_replace(' ', '', Query::param($atts, 'categories', HfCore\T_STR))) as $item) {
+				foreach ($this->getVehicleCategories($branch) as $category) {
+					if (strtolower(str_replace('-', '', $category->title)) == $item)
+						$categories[$category->id] = $category;
+				}
+			}
+		}
+		else {
+			$categories = $this->getVehicleCategories($branch);
+		}
 
 		// Vehicles
-		$vehicles = $this->getVehicles(Query::param($atts, 'branch', HfCore\T_INT, 1));
-		$items = HtmlNode::div()->addClass('items')->appendTo($body);
+		$items = HtmlNode::div()->addClass('items')->hide()->appendTo($body);
 
-		foreach ($vehicles as $vehicle) {
+		foreach ($vehicles->getAll() as $vehicle) {
+			if (!array_key_exists($vehicle->categoryId, $categories))
+				continue;
+
+			if (!array_key_exists($vehicle->manufacturerId, $manufacturers))
+				continue;
+
 			$bike = HtmlNode::div()
 				->addClass('item')
 				->data('categoryid', $vehicle->categoryId)
 				->data('typeId', $vehicle->typeId)
+				->data('manufacturerid', $vehicle->manufacturerId)
 				->data('year', $vehicle->year)
 				->data('price', (int)$vehicle->price);
 
@@ -68,8 +107,37 @@ class CyclyFrontend extends CyclySystem {
 			$items->append($bike);
 		}
 
-		// Mehr anzeigen Button
+		// Mehr-Button
 		HtmlNode::div('Mehr anzeigen')->addClass('moreButton')->appendTo($body);
+
+		// Filter
+		$fitlers = HtmlNode::div()->prependTo($body)->addClass('filters');
+
+		$categoryOptions = [];
+
+		if (count($categories) > 1)
+			$categoryOptions[0] = 'Alle';
+
+		foreach ($categories as $category) {
+			if ($category->count)
+				$categoryOptions[$category->id] = $category->title;
+		}
+
+		$fitlers->append($this->generateFilter('categoryId', 'Kategorie', $categoryOptions, array_key_first($categoryOptions), count($categories) > 1));
+
+		$manufacturerOptions = [];
+
+		if (count($manufacturers) > 1)
+			$manufacturerOptions = [0 => 'Alle'];
+
+		foreach ($manufacturers as $key => $name) {
+			$manufacturerOptions[$key] = $name;
+		}
+
+		$fitlers->append($this->generateFilter('manufacturerId', 'Hersteller', $manufacturerOptions, array_key_first($manufacturerOptions), count($manufacturers) > 1));
+
+		// Sortierfunktion
+		$fitlers->append($this->generateFilter('sort', 'Sortieren', [2 => 'Preis', 1 => 'Preis absteigend', 4 => 'Jahrgang', 3 => 'Jahrgang absteigend'], Query::param($atts, 'sort', HfCore\T_INT, 2)));
 
 		// Dialog
 		$close = HtmlNode::a(HtmlNode::span(), HtmlNode::span())->addClass('button-close');
@@ -255,115 +323,169 @@ class CyclyFrontend extends CyclySystem {
 	}
 
 	/**
-	 * @param $id
-	 * @return \Cycly\Vehicle|null
-	 */
-	private function getVehicleById($id): ?\Cycly\Vehicle {
-		$item = new \Cycly\Vehicle();
-		$item->fromData(\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', $id]));
-
-		return $item;
-	}
-
-	/**
-	 * Fahrzeuge einer Geschäftsstelle
-	 * @param int $branchId
-	 * @return \Cycly\Vehicle[]
-	 */
-	private function getVehicles($branchId = 1): array {
-		$vehicles = [];
-
-		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'branch', $branchId]) as $data) {
-			$item = new \Cycly\Vehicle();
-			$item->fromData($data);
-
-			// Filter für "Velos ohne Bild"
-			if (get_option('cycly_hide_vehicle_without_image') && empty($item->images))
-				continue;
-
-			$vehicles[$item->id] = $item;
-		}
-
-		return $vehicles;
-	}
-
-	/**
-	 * Mitarbeiter einer Geschäftsstelle
-	 * @param int $branchId
-	 * @return \Cycly\Employee[]
-	 */
-	private function getEmployees($branchId = 1): array {
-		$employees = [];
-
-		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'employees', 'branch', $branchId]) as $data) {
-			$item = new \Cycly\Employee();
-			$item->fromData($data);
-			$employees[$data->id] = $item;
-		}
-
-		return $employees;
-	}
-
-	/**
-	 * @return \Cycly\VehicleCategory
-	 */
-	public function getVehicleCategoryById(int $id): \Cycly\VehicleCategory {
-		$categories = $this->getVehicleCategories();
-
-		if (!isset($categories[$id]))
-			throw new \Exception('Kategorie nicht gefuden', 404);
-
-		return $categories[$id];
-	}
-
-	/**
-	 * @return \Cycly\VehicleCategory[]
-	 */
-	private function getVehicleCategories(): array {
-		$items = [];
-
-		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'categories']) as $data) {
-			$item = new \Cycly\VehicleCategory();
-			$item->fromData($data);
-			$items[$item->id] = $item;
-		}
-
-		foreach ($this->getVehicles() as $vehicle)
-			$items[$vehicle->categoryId]->count++;
-
-		return $items;
-	}
-
-	/**
-	 * @return \Cycly\VehicleType[]
-	 */
-	private function getVehicleTypes(): array {
-		$this->items = [];
-
-		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'types']) as $data) {
-			$item = new \Cycly\VehicleType();
-			$item->fromData($data);
-			$items[$item->id] = $item;
-		}
-
-		return $items;
-	}
-
-	/**
 	 * @param $name Html Name
 	 * @param $title Beschreibung
 	 * @param $options Einzelne Optionen [1 => 'option']
-	 * @return HtmlNode
+	 * @param $default Vorselektierter Wert
+	 * @param $show Filter anzeigen
+	 * @return HtmlNode|null
 	 */
-	private function generateFilter($name, $title, array $options) {
-		$select = HtmlNode::select()->attr('name', $name);
+	private function generateFilter(string $name, string $title, array $options, $default = null, $show = true): ?HtmlNode {
+		$select = HtmlNode::select()->attr('name', strtolower($name));
 
-		foreach ($options as $index => $option)
-			$select->append(HtmlNode::option($option)->attr('value', $index));
+		foreach ($options as $index => $option) {
+			$option = HtmlNode::option($option)
+				->attr('value', $index)
+				->appendTo($select);
 
-		return HtmlNode::label(
-			HtmlNode::span($title)->addClass('title'),
-			$select
-		);
+			if ($default && $default == $index)
+				$option->attr('selected', 'selected');
+		}
+
+		$label = HtmlNode::label()
+			->append(HtmlNode::span($title)->addClass('title'))
+			->append($select);
+
+		if ($show)
+			return $label;
+
+		return null;
+	}
+}
+
+class VehicleSet {
+	/**
+	 * @var \HfCore\System
+	 */
+	private $system;
+
+	/**
+	 * @var \Cycly\Vehicle[]
+	 */
+	private $vehicles = [];
+
+	/**
+	 * @var VehicleFilter[]
+	 */
+	public $filter = [];
+
+	public function __construct(?int $branch = null) {
+		$this->system = \HfCore\System::getInstance();
+
+		if ($branch)
+			$this->vehicles = $this->system->getVehicles($branch);
+		else {
+			foreach ($this->system->getBranches() as $branch)
+				$this->vehicles = array_merge($this->system->getVehicles($branch->id), $this->vehicles);
+		}
+	}
+
+	/**
+	 * Alle Fahrzeuge (gefiltert)
+	 * @return \Cycly\Vehicle[]
+	 */
+	public function getAll(): array {
+		$items = [];
+
+		foreach ($this->vehicles as $vehicle) {
+			$add = true;
+
+			//foreach ($this->filter as $filter) {
+				//if (!$this->filter[1]->compare($vehicle))
+				//	$add = false;
+			//}
+
+			if ($add)
+				$items[] = $vehicle;
+		}
+
+		return $items;
+	}
+
+	public function addFilter(VehicleFilter $filter) {
+		$this->filter[] = $filter;
+	}
+}
+
+class VehicleFilter {
+
+	private $options = [];
+	private $title = '';
+	private $propertyName = '';
+	private $vehicleSet;
+
+	/**
+	 * @param string $propertyName Fahrzeugeigenschaft welche gefiltert werden soll
+	 * @param $options ['scott' => 'Scott']
+	 * @param string $title
+	 */
+	public function __construct(VehicleSet $vehicleSet, string $propertyName, array $options, string $title) {
+		$this->title = $title;
+		$this->options = $options;
+		$this->propertyName = $propertyName;
+		$this->vehicleSet = $vehicleSet;
+
+		// Options konvertieren falls es sich um Objekte handelt
+		if (!is_string(current($this->options))) {
+
+			$newOptions = [];
+
+			foreach ($this->options as $option)
+				$newOptions[strtolower(str_replace([' ', '-'], '', $option->title))] = $option->title;
+
+			$this->options = $newOptions;
+		}
+
+
+		$this->vehicleSet->addFilter($this);
+	}
+
+	/**
+	 * Nur überschneidende Optionen weiterverwenden
+	 * @param $options ['scott','santacruz']
+	 */
+	public function reduceOptions(array $options) {
+		if (empty($options))
+			return;
+
+		$newOptions = [];
+
+		foreach ($this->options as $key => $value) {
+			foreach ($options as $acceptedKey) {
+				if ($key == $acceptedKey)
+					$newOptions[$key] = $value;
+			}
+		}
+
+		$this->options = $newOptions;
+	}
+
+	public function compare(\Cycly\Vehicle $vehicle): bool {
+		if (array_key_exists($vehicle->{$this->propertyName}, $this->options))
+			return true;
+
+		return false;
+	}
+
+	public function getSelect(): ?HtmlNode {
+		$select = HtmlNode::select()->attr('name', strtolower($this->propertyName));
+
+		foreach ($this as $index => $option) {
+			$option = HtmlNode::option($option)
+				->attr('value', $index)
+				->appendTo($select);
+
+			if (array_key_first($this->options))
+				$option->attr('selected', 'selected');
+		}
+
+		$label = HtmlNode::label()
+			->append(HtmlNode::span($this->title)->addClass('title'))
+			->append($select);
+
+		if (count($this->options > 1))
+			return $label;
+
+		return null;
 	}
 }

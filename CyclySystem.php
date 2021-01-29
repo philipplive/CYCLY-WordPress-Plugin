@@ -46,4 +46,119 @@ class CyclySystem extends HfCore\System {
 
 		return $branches;
 	}
+
+	/**
+	 * @param $id
+	 * @return \Cycly\Vehicle|null
+	 */
+	protected function getVehicleById($id): ?\Cycly\Vehicle {
+		$item = new \Cycly\Vehicle();
+		$item->fromData(\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', $id]));
+
+		return $item;
+	}
+
+	/**
+	 * Fahrzeuge einer Geschäftsstelle
+	 * @param int $branchId
+	 * @return \Cycly\Vehicle[]
+	 */
+	public function getVehicles(?int $branchId = null): array {
+		if ($branchId === null)
+			throw new Exception('Noch nicht supported');
+
+		$vehicles = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'branch', $branchId]) as $data) {
+			$item = new \Cycly\Vehicle();
+			$item->fromData($data);
+
+			// Filter für "Velos ohne Bild"
+			if (get_option('cycly_hide_vehicle_without_image') && empty($item->images))
+				continue;
+
+			$vehicles[$item->id] = $item;
+		}
+
+		return $vehicles;
+	}
+
+	/**
+	 * Mitarbeiter einer Geschäftsstelle
+	 * @param int $branchId
+	 * @return \Cycly\Employee[]
+	 */
+	protected function getEmployees($branchId = 1): array {
+		$employees = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'employees', 'branch', $branchId]) as $data) {
+			$item = new \Cycly\Employee();
+			$item->fromData($data);
+			$employees[$data->id] = $item;
+		}
+
+		return $employees;
+	}
+
+	/**
+	 * @return \Cycly\VehicleCategory
+	 */
+	public function getVehicleCategoryById(int $id): \Cycly\VehicleCategory {
+		$categories = $this->getVehicleCategories();
+
+		if (!isset($categories[$id]))
+			throw new \Exception('Kategorie nicht gefuden', 404);
+
+		return $categories[$id];
+	}
+
+	/**
+	 *  Verfügbare Fahrzeugkategorien
+	 * @param int|null $branchId
+	 * @return \Cycly\VehicleCategory[]
+	 */
+	protected function getVehicleCategories(?int $branchId = null): array {
+		$items = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'categories']) as $data) {
+			$item = new \Cycly\VehicleCategory();
+			$item->fromData($data);
+			$items[$item->id] = $item;
+		}
+
+		foreach ($this->getVehicles($branchId) as $vehicle)
+			$items[$vehicle->categoryId]->count++;
+
+		return $items;
+	}
+
+	/**
+	 * @return \Cycly\VehicleType[]
+	 */
+	protected function getVehicleTypes(): array {
+		$this->items = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'types']) as $data) {
+			$item = new \Cycly\VehicleType();
+			$item->fromData($data);
+			$items[$item->id] = $item;
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Verfügbare Marken
+	 * @param int|null $branchId
+	 * @return array ['santacruz' => 'Santa Cruz']
+	 */
+	protected function getManufactures(?int $branchId = null): array {
+		$items = [];
+
+		foreach ($this->getVehicles($branchId) as $item) {
+			$items[$item->manufacturerId] = $item->manufacturer;
+		}
+
+		return $items;
+	}
 }

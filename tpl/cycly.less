@@ -1,9 +1,9 @@
-#cycly-bikes .dialog dl, #cycly-bikes .dialog dt, #cycly-bikes .dialog dd, #cycly-bikes .dialog p {
+#cycly-vehicles .dialog dl, #cycly-vehicles .dialog dt, #cycly-vehicles .dialog dd, #cycly-vehicles .dialog p {
 	font-family: Arial;
 	margin: 0;
 }
 
-#cycly-bikes {
+.cycly-vehicles {
 	margin-bottom: 0;
 	text-align: center;
 
@@ -49,6 +49,12 @@
 					max-height: 100%;
 				}
 			}
+		}
+
+		.empty {
+			grid-column-start: 1;
+			grid-column-end: 3;
+			font-size: 16px;
 		}
 	}
 
@@ -97,13 +103,13 @@
 }
 
 @media screen and (max-width: 400px) {
-	#cycly-bikes .items {
+	#cycly-vehicles .items {
 		grid-template-columns: 1fr;
 	}
 }
 
 @media screen and (max-width: 400px) {
-	#cycly-bikes .filters {
+	#cycly-vehicles .filters {
 		grid-template-columns: 1fr;
 	}
 }
@@ -112,7 +118,7 @@
 /* ------ */
 /* Dialog */
 /* ------ */
-#cycly-bikes .dialog-wrapper {
+#cycly-vehicles .dialog-wrapper {
 	display: none;
 	position: fixed;
 	top: 0;
@@ -132,7 +138,7 @@
 }
 
 /* Close Button */
-#cycly-bikes .dialog .button-close {
+#cycly-vehicles .dialog .button-close {
 	display: flex;
 	position: absolute;
 	top: 0;
@@ -167,7 +173,7 @@
 }
 
 /* Dialog Grundlayout*/
-#cycly-bikes .dialog {
+#cycly-vehicles .dialog {
 	text-align: left;
 	background: #fff;
 	max-width: 1000px;
@@ -266,27 +272,27 @@
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-bikes .dialog {
+	#cycly-vehicles .dialog {
 		top: 0;
 		bottom: 0;
 	}
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-bikes .dialog h2 {
+	#cycly-vehicles .dialog h2 {
 		max-width: calc(100% - 50px);
 	}
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-bikes .dialog .vehicle-details {
+	#cycly-vehicles .dialog .vehicle-details {
 		grid-template-columns: 1fr;
 		grid-gap: 10px;
 	}
 }
 
 /* Kategorie*/
-#cycly-bikes .dialog .vehicle-category {
+#cycly-vehicles .dialog .vehicle-category {
 	text-align: right;
 	align-self: end;
 	font-size: 1.30px;
@@ -301,7 +307,7 @@
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-bikes .dialog .vehicle-category {
+	#cycly-vehicles .dialog .vehicle-category {
 		text-align: left;
 	}
 }

@@ -2,17 +2,21 @@ class BikeModule {
 	constructor(element) {
 		// Elemente
 		this.element = element;
-		this.catagorieFilterElement = this.element.querySelector('select[name=categorie]');
-		this.sortFilterElement = this.element.querySelector('select[name=sort]');
 		this.bikesContainer = this.element.querySelector('.items');
 		this.bikes = [].slice.call(this.element.querySelectorAll('.items .item'));
 		this.moreButton = this.element.querySelector('.moreButton')
 
+		// Sortierelement
+		this.sortFilterElement = this.element.querySelector('select[name=sort]');
+
+		// Filter
+		this.filters = [
+			new Filter(this.element, 'categoryid'),
+			new Filter(this.element, 'manufacturerid')
+		];
+
 		// Dialog
 		this.dialog = new Dialog(this.element.querySelector('.dialog-wrapper'));
-
-		// Einstellungen
-		this.branch = element.dataset.branch;
 
 		// Sonstiges
 		this.showMore = false;
@@ -30,23 +34,27 @@ class BikeModule {
 		};
 
 		this.sort = this.sortFilterElement.value;
-		this.categorieId = this.catagorieFilterElement.value;
+		this.categorieId = 0;
+		this.manufacturer = 0;
 	}
 
 	init() {
-		// Filter Events
-		this.catagorieFilterElement.addEventListener('change', () => {
-			this.categorieId = this.catagorieFilterElement.value;
-			this.filterChangeEvent();
-		});
-
+		// Sortierevent
 		this.sortFilterElement.addEventListener('change', () => {
 			this.sort = this.sortFilterElement.value;
 			this.filterChangeEvent();
 		});
 
+		// Filterevent
+		this.filters.forEach((item) => {
+			item.setChangeEvent(() => {
+				this.filterChangeEvent();
+			});
+		});
+
 		// Anzeigen
 		this.filterChangeEvent();
+		this.bikesContainer.removeAttribute("style");
 
 		// Click Events Bikes
 		this.bikes.forEach((item) => {
@@ -133,7 +141,7 @@ class BikeModule {
 				result = -1;
 
 			// Reihenfolge umkehren
-			if(this.sort % 2)
+			if (this.sort % 2)
 				result *= -1;
 
 			return result;
@@ -141,11 +149,13 @@ class BikeModule {
 
 		// Filter (anzeigen/ausblenden)
 		this.bikes.forEach((item) => {
-				let show = false;
+				let show = true;
 
-				// Categorie Filter
-				if (item.dataset.categoryid == this.categorieId || this.categorieId == 0)
-					show = true;
+				// Filter
+				this.filters.forEach((filter) => {
+					if (!filter.compare(item.dataset))
+						show = false;
+				})
 
 				// Mehr Button berücksichtigen
 				if (!this.showMore && count >= this.showMoreLimit) {
@@ -161,10 +171,19 @@ class BikeModule {
 			}
 		);
 
+		// Mehr-Button
 		if (countOffset)
 			this.showMoreButton();
 		else
 			this.hideMoreButton();
+
+		// Empty-Message
+		if(!count) {
+			let msg = document.createElement('div');
+			msg.classList.add('empty');
+			msg.innerHTML = 'Leider wurden keine Fahrzeuge gefunden';
+			this.bikesContainer.appendChild(msg);
+		}
 	}
 }
 
@@ -213,11 +232,49 @@ class Dialog {
 	}
 }
 
+// Filter
+class Filter {
+	constructor(baseElement, name) {
+		this.element = baseElement.querySelector('select[name=' + name + ']');
+		this.name = name;
+	}
+
+	// Filter vorhanden?
+	isEnabled() {
+		return this.element ? true : false;
+	}
+
+	setChangeEvent(callback) {
+		if (this.isEnabled())
+			this.element.addEventListener('change', callback);
+	}
+
+	// Aktuell gewählter Wert zurückgeben (Alle = 0)
+	getValue() {
+		if (this.isEnabled())
+			return this.element.value;
+
+		return 0;
+	}
+
+	// Dataset vergleichen mit dem Filter
+	compare(dataset) {
+		if(this.getValue() == 0)
+			return true;
+
+		return dataset[this.name] == this.getValue();
+	}
+}
+
 // Start Event
 document.addEventListener("DOMContentLoaded", function () {
 	// Bikeanzeige
-	let bikeElement = document.getElementById('cycly-bikes');
-
-	if (bikeElement)
-		new BikeModule(bikeElement);
+	document.querySelectorAll('.cycly-vehicles').forEach((item) => {
+		new BikeModule(item);
+	});
 });
+
+// Debug
+function l(log) {
+	console.log(log);
+}

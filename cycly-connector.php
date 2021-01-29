@@ -4,13 +4,13 @@
  *
  * @package           	CYCLY
  * @author            	CYCLY (Optimanet Schweiz AG)
- * @copyright         	2020 Optimanet Schweiz AG
+ * @copyright         	2021 Optimanet Schweiz AG
  * @contact				https://cycly.ch/kontakt/
  *
  * Plugin Name:       	CYCLY Connector
  * Plugin URI:        	https://cycly.ch
  * Description:       	Ermöglicht das Einbinden von Daten aus CYCLY direkt auf Ihre Website.
- * Version:           	0.9.9.2
+ * Version:           	0.9.9.3
  * Requires at least: 	5.0
  * Requires PHP:     	7.3
  * Author:           	CYCLY (Optimanet Schweiz AG)
