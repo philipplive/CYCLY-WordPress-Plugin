@@ -28,7 +28,7 @@ class Vehicle extends Item {
 	 * Hersteller Tag (z.B. 'santacruz')
 	 * @var string
 	 */
-	public $manufacturerId = '';
+	public $manufacturerKey = '';
 
 	/**
 	 * Typ als String
@@ -225,7 +225,7 @@ class Vehicle extends Item {
 		$this->id = $data->id;
 		$this->model = $data->model;
 		$this->manufacturer = $data->manufacturer;
-		$this->manufacturerId = str_replace([' ', '-'], '', strtolower($data->manufacturer));
+		$this->manufacturerKey = str_replace([' ', '-'], '', strtolower($data->manufacturer));
 		$this->type = $data->type;
 		$this->typeId = $data->typeId;
 		$this->category = $data->category;

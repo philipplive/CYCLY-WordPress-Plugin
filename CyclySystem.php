@@ -114,10 +114,9 @@ class CyclySystem extends HfCore\System {
 
 	/**
 	 *  Verfügbare Fahrzeugkategorien
-	 * @param int|null $branchId
 	 * @return \Cycly\VehicleCategory[]
 	 */
-	protected function getVehicleCategories(?int $branchId = null): array {
+	protected function getVehicleCategories(): array {
 		$items = [];
 
 		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'vehicles', 'categories']) as $data) {
@@ -125,9 +124,6 @@ class CyclySystem extends HfCore\System {
 			$item->fromData($data);
 			$items[$item->id] = $item;
 		}
-
-		foreach ($this->getVehicles($branchId) as $vehicle)
-			$items[$vehicle->categoryId]->count++;
 
 		return $items;
 	}
@@ -156,7 +152,7 @@ class CyclySystem extends HfCore\System {
 		$items = [];
 
 		foreach ($this->getVehicles($branchId) as $item) {
-			$items[$item->manufacturerId] = $item->manufacturer;
+			$items[$item->manufacturerKey] = $item->manufacturer;
 		}
 
 		return $items;

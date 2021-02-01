@@ -1,4 +1,4 @@
-#cycly-vehicles .dialog dl, #cycly-vehicles .dialog dt, #cycly-vehicles .dialog dd, #cycly-vehicles .dialog p {
+.cycly-vehicles .dialog dl, .cycly-vehicles .dialog dt, .cycly-vehicles .dialog dd, .cycly-vehicles .dialog p {
 	font-family: Arial;
 	margin: 0;
 }
@@ -90,26 +90,32 @@
 		align-items: stretch;
 		display: flex;
 		font-size: 16px;
-	}
+		line-height: 1;
 
-	select {
-		font-size: 16px;
-		width: 100%;
-		border: none;
-		background: transparent;
-		font-weight: 600;
-		outline: none;
+		.title {
+			margin-right: 5px;
+		}
+
+		select {
+			line-height: 1;
+			font-size: 16px;
+			width: 100%;
+			border: none;
+			background: transparent;
+			font-weight: 600;
+			outline: none;
+		}
 	}
 }
 
 @media screen and (max-width: 400px) {
-	#cycly-vehicles .items {
+	.cycly-vehicles .items {
 		grid-template-columns: 1fr;
 	}
 }
 
 @media screen and (max-width: 400px) {
-	#cycly-vehicles .filters {
+	.cycly-vehicles .filters {
 		grid-template-columns: 1fr;
 	}
 }
@@ -118,7 +124,7 @@
 /* ------ */
 /* Dialog */
 /* ------ */
-#cycly-vehicles .dialog-wrapper {
+.cycly-vehicles .dialog-wrapper {
 	display: none;
 	position: fixed;
 	top: 0;
@@ -138,7 +144,7 @@
 }
 
 /* Close Button */
-#cycly-vehicles .dialog .button-close {
+.cycly-vehicles .dialog .button-close {
 	display: flex;
 	position: absolute;
 	top: 0;
@@ -173,7 +179,7 @@
 }
 
 /* Dialog Grundlayout*/
-#cycly-vehicles .dialog {
+.cycly-vehicles .dialog {
 	text-align: left;
 	background: #fff;
 	max-width: 1000px;
@@ -272,27 +278,27 @@
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-vehicles .dialog {
+	.cycly-vehicles .dialog {
 		top: 0;
 		bottom: 0;
 	}
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-vehicles .dialog h2 {
+	.cycly-vehicles .dialog h2 {
 		max-width: calc(100% - 50px);
 	}
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-vehicles .dialog .vehicle-details {
+	.cycly-vehicles .dialog .vehicle-details {
 		grid-template-columns: 1fr;
 		grid-gap: 10px;
 	}
 }
 
 /* Kategorie*/
-#cycly-vehicles .dialog .vehicle-category {
+.cycly-vehicles .dialog .vehicle-category {
 	text-align: right;
 	align-self: end;
 	font-size: 1.30px;
@@ -307,7 +313,7 @@
 }
 
 @media screen and (max-width: 1100px) {
-	#cycly-vehicles .dialog .vehicle-category {
+	.cycly-vehicles .dialog .vehicle-category {
 		text-align: left;
 	}
 }

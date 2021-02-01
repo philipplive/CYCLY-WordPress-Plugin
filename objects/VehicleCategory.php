@@ -6,7 +6,7 @@ namespace Cycly;
  * Class VehicleCategory
  * @package Cycly
  */
-class VehicleCategory extends Item {
+class VehicleCategory extends Item{
 	/**
 	 * @var int
 	 */
@@ -23,12 +23,6 @@ class VehicleCategory extends Item {
 	 * @var bool
 	 */
 	public $hasEngine = false;
-
-	/**
-	 * Anzahl Fahrzeuge
-	 * @var int
-	 */
-	public $count = 0;
 
 	/**
 	 * @param \stdClass $data

@@ -6,13 +6,16 @@ class BikeModule {
 		this.bikes = [].slice.call(this.element.querySelectorAll('.items .item'));
 		this.moreButton = this.element.querySelector('.moreButton')
 
+		l(this.bikes.length);
+
 		// Sortierelement
 		this.sortFilterElement = this.element.querySelector('select[name=sort]');
 
 		// Filter
 		this.filters = [
 			new Filter(this.element, 'categoryid'),
-			new Filter(this.element, 'manufacturerid')
+			new Filter(this.element, 'manufacturerkey'),
+			new Filter(this.element, 'typeid')
 		];
 
 		// Dialog
