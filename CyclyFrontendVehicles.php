@@ -45,7 +45,6 @@ trait CyclyFrontendVehicles {
 		if (!empty(Query::param($atts, 'manufacturers', HfCore\T_STR, '')))
 			$mFilter->reduceOptions(explode(',', str_replace(' ', '', Query::param($atts, 'manufacturers', HfCore\T_STR))));
 
-
 		// Typen
 		$types = [];
 
@@ -63,7 +62,6 @@ trait CyclyFrontendVehicles {
 		}
 
 		new VehicleFilter($vehicles, 'typeId', $types, 'Typ');
-
 
 		// Body
 		$body = HtmlNode::div()->addClass('cycly-vehicles');
@@ -481,7 +479,6 @@ class VehicleFilter {
 					$use = true;
 					break;
 				}
-
 			}
 
 			if (!$use)
@@ -494,8 +491,10 @@ class VehicleFilter {
 	 * @return HtmlNode|null
 	 */
 	public function getSelect(): ?HtmlNode {
+		// Nicht verwendete Eigenschaften entfernen
 		$this->autoReduce();
 
+		// Falls nur eine Option verfügbar, ausblenden
 		if (count($this->options) < 2)
 			return null;
 
