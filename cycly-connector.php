@@ -42,6 +42,8 @@ else {
 	require_once('objects/VehicleType.php');
 	require_once('objects/Vehicle.php');
 	require_once('objects/Employee.php');
+	require_once('CyclyFrontendVehicles.php');
+	require_once('CyclyFrontendEmployees.php');
 	require_once('CyclyFrontend.php');
 	new CyclyFrontend();
 }

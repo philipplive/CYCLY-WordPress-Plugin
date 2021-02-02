@@ -8,11 +8,13 @@ Mit diesem Plugin können Daten direkt aus [CYCLY](https://cycly.ch/) auf deine 
 Folgende Tags werden aktuell angeboten:
 
 ```
-[show_bikes branch="1" manufacturers="scott,santacruz" categories="trekkingbike" sort="2"]
+[show_vehicles branch="1" manufacturers="scott,santacruz" categories="trekkingbike" types="neufahrzeug" sort="2"]
 ```
 * Anzeige der Fahrzeuge.
+* Geschäftsstelle **branch**.
 * Optional kann mittels **manufactures** die Auswahl der möglichen Fahrzeughersteller eingeschränkt werden.
 * Optional kann mittels **categories** die Auswahl der möglichen Fahrzeugkategorien eingeschränkt werden.
+* Optional kann mittels **types** die Auswahl der möglichen Fahrzeugtypen eingeschränkt werden.
 * Optional kann mittels **sort** die Standard-Sortierreihenfolge geändert werden (1 = Preis absteigend, 2 = Preis aufsteigend (standard), 3 = Baujahr absteigend, 4 ) Baujahr aufsteigend
   
 ```
