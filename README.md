@@ -15,8 +15,9 @@ Folgende Tags werden aktuell angeboten:
 * Optional kann mittels **manufactures** die Auswahl der möglichen Fahrzeughersteller eingeschränkt werden.
 * Optional kann mittels **categories** die Auswahl der möglichen Fahrzeugkategorien eingeschränkt werden.
 * Optional kann mittels **types** die Auswahl der möglichen Fahrzeugtypen eingeschränkt werden.
+* Optional kann mittels **onStock="true"** die Auswahl auf aktuell verfügbare Fahrzeuge beschränkt werden.
 * Optional kann mittels **sort** die Standard-Sortierreihenfolge geändert werden (1 = Preis absteigend, 2 = Preis aufsteigend (standard), 3 = Baujahr absteigend, 4 ) Baujahr aufsteigend
-  
+
 ```
 [show_employees branch="1"]
 ```

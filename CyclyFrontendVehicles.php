@@ -20,6 +20,10 @@ trait CyclyFrontendVehicles {
 		// Verfügbare Fahrzeuge
 		$vehicles = new VehicleSet($branch);
 
+		// An Lager
+		if (!empty(Query::param($atts, 'onstock', HfCore\T_STR)))
+			new VehicleFilter($vehicles, 'stock', [1 => 'An Lager'], 'An Lager');
+
 		// Kategorien
 		$categories = [];
 
@@ -44,10 +48,6 @@ trait CyclyFrontendVehicles {
 
 		if (!empty(Query::param($atts, 'manufacturers', HfCore\T_STR, '')))
 			$mFilter->reduceOptions(explode(',', str_replace(' ', '', Query::param($atts, 'manufacturers', HfCore\T_STR))));
-
-		// An Lager
-		if (Query::param($atts, 'onStock', HfCore\T_BOOL, false))
-			new VehicleFilter($vehicles, 'stock', [0 => 'Nicht an Lager', 1 => 'An Lager'], 'Hersteller');
 
 		// Typen
 		$types = [];
@@ -455,7 +455,13 @@ class VehicleFilter {
 	 * @return bool
 	 */
 	public function compare(\Cycly\Vehicle $vehicle): bool {
-		if (array_key_exists($vehicle->{$this->propertyName}, $this->options))
+		$value = $vehicle->{$this->propertyName};
+
+		if(is_bool($value))
+			$value = $value ? 1 : 0;
+
+
+		if (array_key_exists($value, $this->options))
 			return true;
 
 		return false;
