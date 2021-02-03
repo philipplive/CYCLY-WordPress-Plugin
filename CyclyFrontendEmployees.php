@@ -20,7 +20,7 @@ trait CyclyFrontendEmployees {
 			$item = HtmlNode::div()->addClass('employee')->appendTo($body);
 
 			if ($emplyee->image)
-				$item->append(HtmlNode::img()->attr('src', $emplyee->image->getUrlTiny())->attr('title', $emplyee->image->title));
+				$item->append(HtmlNode::img()->attr('src', $emplyee->image->getResizedImageLink(300,300,\HfCore\Image::RESIZE_CROP))->attr('title', $emplyee->image->title));
 			else
 				$item->append(HtmlNode::img()->attr('src', $this->getPluginUrl().'/tpl/employee-empty.jpg')->attr('title', 'Kein Titel'));
 
