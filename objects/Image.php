@@ -64,7 +64,7 @@ class Image extends Item {
 	 * @return string|null
 	 */
 	public function getResizedImageLink(int $width, int $height, int $type = \HfCore\Image::RESIZE_MAX): string {
-		$name = 'vehicleimage-'.$this->id.'-'.$this->md5.'-'.$width.'-'.$height.'.jpeg';
+		$name = 'employeeimage-'.$this->id.'-'.$this->md5.'-'.$width.'-'.$height.'.jpeg';
 
 		$file = \HfCore\IO::getFile(\HfCore\System::getInstance()->getPluginPath().'cache/'.$name);
 
@@ -82,7 +82,7 @@ class Image extends Item {
 	 * @return \FileLocal
 	 */
 	public function getFile(): \HfCore\FileLocal {
-		$file = \HfCore\IO::getFile(\HfCore\System::getInstance()->getPluginCachePath().'/vehicleimage-'.$this->id.'-'.$this->md5.'.png');
+		$file = \HfCore\IO::getFile(\HfCore\System::getInstance()->getPluginCachePath().'/employeeimage-'.$this->id.'-'.$this->md5.'.png');
 
 		if (!$file->exists())
 			$file->write(\HfCore\CurlClient::create($this->url)->exec()->getBody());

@@ -41,11 +41,13 @@ class Employee extends Item {
 		$this->firstname = $data->firstname;
 		$this->lastname = $data->lastname;
 
-		$this->image = new \Cycly\Image();
-		$this->image->id = $data->id;
-		$this->image->url = $data->image;
-		$this->image->md5 = md5($data->firstname.$data->lastname);
-		$this->image->title = $data->firstname.' '.$data->lastname;
+		if ($data->image) {
+			$this->image = new \Cycly\Image();
+			$this->image->id = $data->id;
+			$this->image->url = $data->image;
+			$this->image->md5 = md5($data->firstname.$data->lastname);
+			$this->image->title = $data->firstname.' '.$data->lastname;
+		}
 
 		return $this;
 	}

@@ -45,6 +45,10 @@ trait CyclyFrontendVehicles {
 		if (!empty(Query::param($atts, 'manufacturers', HfCore\T_STR, '')))
 			$mFilter->reduceOptions(explode(',', str_replace(' ', '', Query::param($atts, 'manufacturers', HfCore\T_STR))));
 
+		// An Lager
+		if (Query::param($atts, 'onStock', HfCore\T_BOOL, false))
+			new VehicleFilter($vehicles, 'stock', [0 => 'Nicht an Lager', 1 => 'An Lager'], 'Hersteller');
+
 		// Typen
 		$types = [];
 

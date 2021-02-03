@@ -29,8 +29,11 @@ class CyclyApi {
 
 		//print_r($jsonResult);
 
-		if ($result->httpCode != 200)
+		if ($result->httpCode != 200) {
+			echo "AAA";
+			print_r($result);
 			throw new \Exception('Cycly-API Error: '.$jsonResult->error->message, $jsonResult->error->code);
+		}
 
 		return $jsonResult;
 	}
@@ -43,10 +46,11 @@ class CyclyApi {
 	 * @param int $maxAge in Sekunden
 	 * @return mixed
 	 */
-	public static function cacheRequest($method = 'account', string $type = 'GET', array $data = [],?int $maxAge = null) {
-		if(!$maxAge)
+	public static function cacheRequest($method = 'account', string $type = 'GET', array $data = [], ?int $maxAge = null) {
+		if (!$maxAge)
 			$maxAge = get_option('cycly_cache_age') ? get_option('cycly_cache_age') * 3600 : 3600;
 
+		$maxAge = 0;
 		$identifier = [];
 		$identifier[] = is_array($method) ? implode('/', $method) : $method;
 		$identifier[] = $type;

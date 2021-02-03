@@ -92,7 +92,7 @@ class CurlClient {
      */
     public function setCache($maxAge = null, ?string $type = null, ?string $identifier = null) {
         if (!$this->url && !$identifier)
-            throw new Exception('Kein Identifier für Cache oder URL gesetzt');
+            throw new \Exception('Kein Identifier für Cache oder URL gesetzt');
 
         $this->cache = Cache::db($type ? $type : 'curl', $identifier ? $identifier : $this->url, $maxAge);
         return $this;
@@ -202,11 +202,11 @@ class CurlClient {
     /**
      * Gesetzte Cookies abrufen
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCookies(): string {
         if (!$this->cookiesEnabled)
-            throw new Exception('Cookies sind nicht aktiviert');
+            throw new \Exception('Cookies sind nicht aktiviert');
 
         $cookies = '';
         foreach ($this->cookiesData as $name => $value)
@@ -404,7 +404,7 @@ class CurlClient {
      * Ausführen
      * @param boolean $noCache Cache ignorieren und neu laden
      * @return CurlResult
-     * @throws Exception
+     * @throws \Exception
      */
     public function exec(bool $noCache = false) {
         $cdata = null;
@@ -435,7 +435,7 @@ class CurlClient {
 
             $errorCode = $this->getErrorCode();
             if ($errorCode)
-                throw new Exception(sprintf('Fehler bei Curl-Request: "%s" URL: "%s"', $this->getError(), $this->getURL()), $errorCode);
+                throw new \Exception(sprintf('Fehler bei Curl-Request: "%s" URL: "%s"', $this->getError(), $this->getURL()), $errorCode);
 
             // Resultat parsen
             $this->result = new CurlResult($this, $this->decode($raw), $this->getInfo(CURLINFO_HEADER_SIZE), $this->getInfo(CURLINFO_HTTP_CODE));
@@ -468,11 +468,11 @@ class CurlClient {
     /**
      * Geparstes Resultat
      * @return CurlResult
-     * @throws Exception
+     * @throws \Exception
      */
     public function getResult(): CurlResult {
         if (!$this->result)
-            throw new Exception('Request wurde noch nicht ausgeführt');
+            throw new \Exception('Request wurde noch nicht ausgeführt');
 
         return $this->result;
     }
