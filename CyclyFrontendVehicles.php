@@ -457,9 +457,9 @@ class VehicleFilter {
 	public function compare(\Cycly\Vehicle $vehicle): bool {
 		$value = $vehicle->{$this->propertyName};
 
+		// Boolwerte in Integer umwandeln
 		if(is_bool($value))
 			$value = $value ? 1 : 0;
-
 
 		if (array_key_exists($value, $this->options))
 			return true;
