@@ -61,10 +61,10 @@ class BikeModule {
 
 		// Click Events Bikes
 		this.bikes.forEach((item) => {
-				item.querySelector('a').addEventListener('click', (event) => {
+				item.addEventListener('click', (event) => {
 					this.dialog.show();
 
-					HfCore.request('cycly-connector/bike/' + item.querySelector('a').dataset.id)
+					HfCore.request('cycly-connector/bike/' + item.dataset.id)
 						.then(data => {
 							this.dialog.setContent(data);
 						})

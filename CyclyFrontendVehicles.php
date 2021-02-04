@@ -74,21 +74,21 @@ trait CyclyFrontendVehicles {
 		$items = HtmlNode::div()->addClass('items')->hide()->appendTo($body);
 
 		foreach ($vehicles->getAll() as $vehicle) {
-			$bike = HtmlNode::div()
+			$bike = HtmlNode::a()
 				->addClass('item')
+				->data('id', $vehicle->id)
 				->data('categoryid', $vehicle->categoryId)
 				->data('typeId', $vehicle->typeId)
 				->data('manufacturerkey', $vehicle->manufacturerKey)
 				->data('year', $vehicle->year)
 				->data('price', (int)$vehicle->price);
 
-			$img = HtmlNode::img();
-			$bike->append(HtmlNode::a($img)->addClass('image')->data('id', $vehicle->id));
+			$img = HtmlNode::div()->appendTo($bike)->addClass('item-image');
 
 			if (count($vehicle->images))
-				$img->attr('src', $vehicle->images[0]->getResizedImageLink(500, 500))->attr('title', $vehicle->images[0]->title);
+				$img->setBackgroundImage( $vehicle->images[0]->getResizedImageLink(500, 500));
 			else
-				$img->attr('src', $this->getPluginUrl().'/tpl/vehicle-empty.png')->attr('title', 'Kein Bild vorhanden');
+				$img->setBackgroundImage($this->getPluginUrl().'/tpl/vehicle-empty.png');
 
 			$bike->append(
 				HtmlNode::div()
