@@ -10,25 +10,32 @@ trait CyclyFrontendVehicles {
 
 	/**
 	 * WP-Tag Veloliste
-	 * @param $atts ['branch', 'categories', 'manufacturers', 'types', 'sort']
+	 * @param $atts
 	 * @return string
 	 */
 	public function tagVehicles($atts): string {
-		// Geschäftsstelle
+		// Tagparameter
+		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR);
+		$attCategories = Query::param($atts, 'categories', HfCore\T_STR, '');
+		$attManufacturers = Query::param($atts, 'manufacturers', HfCore\T_STR, '');
+		$attTypes = Query::param($atts, 'types', HfCore\T_STR, '');
+		$attSort = Query::param($atts, 'sort', HfCore\T_INT, 2);
+		$attSortable = Query::param($atts, 'sortable', HfCore\T_STR, '') ? false : true;
+		$attLimit = Query::param($atts, 'limit', HfCore\T_INT, 10);
 		$branch = Query::param($atts, 'branch', HfCore\T_INT, 1);
 
 		// Verfügbare Fahrzeuge
 		$vehicles = new VehicleSet($branch);
 
 		// An Lager
-		if (!empty(Query::param($atts, 'onstock', HfCore\T_STR)))
+		if (!empty($attOnstock))
 			new VehicleFilter($vehicles, 'stock', [1 => 'An Lager'], 'An Lager');
 
 		// Kategorien
 		$categories = [];
 
-		if (!empty(Query::param($atts, 'categories', HfCore\T_STR, ''))) {
-			$items = explode(',', str_replace(' ', '', Query::param($atts, 'categories', HfCore\T_STR)));
+		if (!empty($attCategories)) {
+			$items = explode(',', str_replace(' ', '', $attCategories));
 
 			foreach ($this->getVehicleCategories() as $category) {
 				if (in_array(strtolower(str_replace('-', '', $category->title)), $items))
@@ -46,14 +53,14 @@ trait CyclyFrontendVehicles {
 		$manufacturers = $this->getManufactures($branch);
 		$mFilter = new VehicleFilter($vehicles, 'manufacturerKey', $manufacturers, 'Hersteller');
 
-		if (!empty(Query::param($atts, 'manufacturers', HfCore\T_STR, '')))
-			$mFilter->reduceOptions(explode(',', str_replace(' ', '', Query::param($atts, 'manufacturers', HfCore\T_STR))));
+		if (!empty($attManufacturers))
+			$mFilter->reduceOptions(explode(',', str_replace(' ', '', $attManufacturers)));
 
 		// Typen
 		$types = [];
 
-		if (!empty(Query::param($atts, 'types', HfCore\T_STR, ''))) {
-			$items = explode(',', str_replace(' ', '', Query::param($atts, 'types', HfCore\T_STR)));
+		if (!empty($attTypes)) {
+			$items = explode(',', str_replace(' ', '', $attTypes));
 
 			foreach ($this->getVehicleTypes() as $type) {
 				if (in_array(strtolower(str_replace(['-', '/'], '', $type->title)), $items))
@@ -68,7 +75,7 @@ trait CyclyFrontendVehicles {
 		new VehicleFilter($vehicles, 'typeId', $types, 'Typ');
 
 		// Body
-		$body = HtmlNode::div()->addClass('cycly-vehicles');
+		$body = HtmlNode::div()->addClass('cycly-vehicles')->data('limit',$attLimit);
 
 		// Vehicles
 		$items = HtmlNode::div()->addClass('items')->hide()->appendTo($body);
@@ -86,7 +93,7 @@ trait CyclyFrontendVehicles {
 			$img = HtmlNode::div()->appendTo($bike)->addClass('item-image');
 
 			if (count($vehicle->images))
-				$img->setBackgroundImage( $vehicle->images[0]->getResizedImageLink(500, 500));
+				$img->setBackgroundImage($vehicle->images[0]->getResizedImageLink(500, 500));
 			else
 				$img->setBackgroundImage($this->getPluginUrl().'/tpl/vehicle-empty.png');
 
@@ -114,8 +121,24 @@ trait CyclyFrontendVehicles {
 			$filterBody->append($filter->getSelect());
 
 		// Sortierfunktion
+		$select = HtmlNode::select()->attr('name', 'sort');
+
+		foreach ([2 => 'Preis', 1 => 'Preis absteigend', 4 => 'Jahrgang', 3 => 'Jahrgang absteigend'] as $index => $option) {
+			$option = HtmlNode::option($option)
+				->attr('value', $index)
+				->appendTo($select);
+
+			if ($attSort == $index)
+				$option->attr('selected', 'selected');
+		}
+
+		$label = HtmlNode::label()
+			->append(HtmlNode::span('Sortieren')->addClass('title'))
+			->append($select)
+			->setStyle('display', $attSortable ? null : 'none');
+
 		$filterBody->append(
-			$this->generateFilter('sort', 'Sortieren', [2 => 'Preis', 1 => 'Preis absteigend', 4 => 'Jahrgang', 3 => 'Jahrgang absteigend'], Query::param($atts, 'sort', HfCore\T_INT, 2))
+			$label
 		);
 
 		// Dialog
@@ -284,36 +307,6 @@ trait CyclyFrontendVehicles {
 
 		echo $element;
 	}
-
-	/**
-	 * @param $name Html Name
-	 * @param $title Beschreibung
-	 * @param $options Einzelne Optionen [1 => 'option']
-	 * @param $default Vorselektierter Wert
-	 * @param $show Filter anzeigen
-	 * @return HtmlNode|null
-	 */
-	private function generateFilter(string $name, string $title, array $options, $default = null, $show = true): ?HtmlNode {
-		$select = HtmlNode::select()->attr('name', strtolower($name));
-
-		foreach ($options as $index => $option) {
-			$option = HtmlNode::option($option)
-				->attr('value', $index)
-				->appendTo($select);
-
-			if ($default && $default == $index)
-				$option->attr('selected', 'selected');
-		}
-
-		$label = HtmlNode::label()
-			->append(HtmlNode::span($title)->addClass('title'))
-			->append($select);
-
-		if ($show)
-			return $label;
-
-		return null;
-	}
 }
 
 /**
@@ -368,8 +361,9 @@ class VehicleSet {
 					$add = false;
 			}
 
-			if ($add)
+			if ($add) {
 				$items[] = $vehicle;
+			}
 		}
 
 		return $items;
@@ -458,7 +452,7 @@ class VehicleFilter {
 		$value = $vehicle->{$this->propertyName};
 
 		// Boolwerte in Integer umwandeln
-		if(is_bool($value))
+		if (is_bool($value))
 			$value = $value ? 1 : 0;
 
 		if (array_key_exists($value, $this->options))

@@ -7,7 +7,6 @@ class BikeModule {
 		this.moreButton = this.element.querySelector('.moreButton')
 
 		l(this.bikes.length);
-
 		// Sortierelement
 		this.sortFilterElement = this.element.querySelector('select[name=sort]');
 
@@ -23,7 +22,7 @@ class BikeModule {
 
 		// Sonstiges
 		this.showMore = false;
-		this.showMoreLimit = 10;
+		this.showMoreLimit = this.element.dataset.limit;
 
 		// Start
 		this.init();
