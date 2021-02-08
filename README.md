@@ -8,7 +8,7 @@ Mit diesem Plugin können Daten direkt aus [CYCLY](https://cycly.ch/) auf deine 
 Folgende Tags werden aktuell angeboten:
 
 ```
-[show_vehicles branch="1" manufacturers="scott,santacruz" categories="trekkingbike" types="neufahrzeug" sort="2"]
+[show_vehicles branch="1" manufacturers="scott,santacruz" categories="trekkingbike" types="neufahrzeug,gebrauchtfahrzeug" sort="2"]
 ```
 * Anzeige der Fahrzeuge.
 * Geschäftsstelle **branch**.
