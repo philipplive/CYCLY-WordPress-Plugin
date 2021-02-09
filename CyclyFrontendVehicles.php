@@ -14,13 +14,13 @@ trait CyclyFrontendVehicles {
 	 * @return string
 	 */
 	public function tagVehicles($atts): string {
-		// Tagparameter
-		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR);
+		// Parameter
+		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR,'') == 'true'  ? true : false;
 		$attCategories = Query::param($atts, 'categories', HfCore\T_STR, '');
 		$attManufacturers = Query::param($atts, 'manufacturers', HfCore\T_STR, '');
 		$attTypes = Query::param($atts, 'types', HfCore\T_STR, '');
 		$attSort = Query::param($atts, 'sort', HfCore\T_INT, 2);
-		$attSortable = Query::param($atts, 'sortable', HfCore\T_STR, '') ? false : true;
+		$attSortable = Query::param($atts, 'sortable', HfCore\T_STR, '') == 'false' ? false : true;
 		$attLimit = Query::param($atts, 'limit', HfCore\T_INT, 10);
 		$branch = Query::param($atts, 'branch', HfCore\T_INT, 1);
 
@@ -28,7 +28,7 @@ trait CyclyFrontendVehicles {
 		$vehicles = new VehicleSet($branch);
 
 		// An Lager
-		if (!empty($attOnstock))
+		if ($attOnstock)
 			new VehicleFilter($vehicles, 'stock', [1 => 'An Lager'], 'An Lager');
 
 		// Kategorien
@@ -47,11 +47,11 @@ trait CyclyFrontendVehicles {
 				$categories[$category->id] = $category->title;
 		}
 
-		new VehicleFilter($vehicles, 'categoryId', $categories, 'Kategorie');
+		new VehicleFilter($vehicles, 'categoryId', $categories, 'Kategorie:');
 
 		// Hersteller
 		$manufacturers = $this->getManufactures($branch);
-		$mFilter = new VehicleFilter($vehicles, 'manufacturerKey', $manufacturers, 'Hersteller');
+		$mFilter = new VehicleFilter($vehicles, 'manufacturerKey', $manufacturers, 'Hersteller:');
 
 		if (!empty($attManufacturers))
 			$mFilter->reduceOptions(explode(',', str_replace(' ', '', $attManufacturers)));
@@ -72,7 +72,7 @@ trait CyclyFrontendVehicles {
 				$types[$type->id] = $type->title;
 		}
 
-		new VehicleFilter($vehicles, 'typeId', $types, 'Typ');
+		new VehicleFilter($vehicles, 'typeId', $types, 'Typ:');
 
 		// Body
 		$body = HtmlNode::div()->addClass('cycly-vehicles')->data('limit',$attLimit);
@@ -133,7 +133,7 @@ trait CyclyFrontendVehicles {
 		}
 
 		$label = HtmlNode::label()
-			->append(HtmlNode::span('Sortieren')->addClass('title'))
+			->append(HtmlNode::span('Sortieren:')->addClass('title'))
 			->append($select)
 			->setStyle('display', $attSortable ? null : 'none');
 
@@ -141,7 +141,7 @@ trait CyclyFrontendVehicles {
 			$label
 		);
 
-		// Dialog
+		// Dialogbox
 		$close = HtmlNode::a(HtmlNode::span(), HtmlNode::span())->addClass('button-close');
 		HtmlNode::div()
 			->append(HtmlNode::div($close, HtmlNode::div()->addClass('dialog-container'))->addClass('dialog'))
@@ -400,9 +400,8 @@ class VehicleFilter {
 		$this->propertyName = $propertyName;
 		$this->vehicleSet = $vehicleSet;
 
-		// Options konvertieren falls es sich um Objekte handelt
+		// Options konvertieren falls es sich um Objekte handelt (id und title muss gesetzt sein)
 		if (!is_string(current($this->options))) {
-
 			$newOptions = [];
 
 			foreach ($this->options as $option) {
@@ -523,6 +522,7 @@ class VehicleFilter {
 
 		$label = HtmlNode::label()
 			->append(HtmlNode::span($this->title)->addClass('title'))
+			->addClass('filter')
 			->append($select);
 
 		return $label;

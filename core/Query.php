@@ -36,7 +36,7 @@ class Query {
 				return $return;
 		}
 
-		throw new SystemException('Unbekannter Datentyp angegeben');
+		throw new \Exception('Unbekannter Datentyp angegeben');
 	}
 
 }

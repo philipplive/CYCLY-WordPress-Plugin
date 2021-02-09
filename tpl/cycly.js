@@ -6,7 +6,6 @@ class BikeModule {
 		this.bikes = [].slice.call(this.element.querySelectorAll('.items .item'));
 		this.moreButton = this.element.querySelector('.moreButton')
 
-		l(this.bikes.length);
 		// Sortierelement
 		this.sortFilterElement = this.element.querySelector('select[name=sort]');
 
