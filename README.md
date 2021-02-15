@@ -10,9 +10,10 @@ Folgende Tags werden aktuell angeboten:
 ```
 [show_vehicles branch="1" manufacturers="scott,santacruz" categories="trekkingbike" types="neufahrzeug,gebrauchtfahrzeug" sort="2"]
 ```
+Wichtig: Die Parameter-Werte sind jeweils Komma getrennt, kleingeschrieben, ohne Abstand und Sonderzeichen zu hinterlegen (z.B. "Santa Cruz" wird zu "santacruz". Zweit Hersteller werden entsprechend mit **manufacturers="scott,santacruz"** hinterlegt).
 * Optional wird die Auswahl via **branch="1"** auf eine Geschäftsstelle beschränkt.
-* Optional kann mittels **manufactures="scott"** die Auswahl der möglichen Fahrzeughersteller eingeschränkt werden. Die Parameter sind jeweils klein, ohne Abstand und Sonderzeichen zu hinterlegen (z.B. "Santa Cruz" wird zu "santacruz").
-* Optional kann mittels **categories="citybike"** die Auswahl der möglichen Fahrzeugkategorien eingeschränkt werden.
+* Optional kann mittels **manufactures="scott"** die Auswahl der möglichen Fahrzeughersteller eingeschränkt werden. 
+* Optional kann mittels **categories="citybike,trekkingbike"** die Auswahl der möglichen Fahrzeugkategorien eingeschränkt werden.
 * Optional kann mittels **types="neufahrzeug"** die Auswahl der möglichen Fahrzeugtypen eingeschränkt werden.
 * Optional kann mittels **onstock="true"** die Auswahl auf aktuell verfügbare Fahrzeuge beschränkt werden.
 * Optional kann mittels **sort="4"** die Standard-Sortierreihenfolge geändert werden (1 = Preis absteigend, 2 = Preis aufsteigend (standard), 3 = Baujahr absteigend, 4 ) Baujahr aufsteigend.
