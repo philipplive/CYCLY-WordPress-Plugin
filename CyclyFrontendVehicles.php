@@ -401,6 +401,7 @@ class VehicleFilter {
 		$this->vehicleSet = $vehicleSet;
 
 		// Options konvertieren falls es sich um Objekte handelt (id und title muss gesetzt sein)
+		// TODO Implementierung via Interface
 		if (!is_string(current($this->options))) {
 			$newOptions = [];
 

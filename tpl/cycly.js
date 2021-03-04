@@ -112,7 +112,7 @@ class BikeModule {
 		}, 200);
 	}
 
-	// Filter anwenden und Bikeliste neu zeichnen
+	// Filter anwenden und Fahrzeugliste neu zeichnen
 	filter(categorieId) {
 		let count = 0;
 		let countOffset = 0;
