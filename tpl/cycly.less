@@ -159,10 +159,11 @@
 	z-index: 100;
 	opacity: 0;
 	transition: opacity .3s ease-in-out;
-	cursor: pointer;
+	align-items: center;
+	justify-content: center;
 
 	&.show {
-		display: block;
+		display: flex;
 		opacity: 1;
 	}
 }
@@ -205,27 +206,21 @@
 /* Dialog Grundlayout*/
 .cycly-vehicles .dialog {
 	text-align: left;
-	background: #fff;
+	background-color: #fff;
+	max-height: calc(~"100vh - 35px");
+	position: relative;
+	width: calc(~"100% - 70px");
 	max-width: 1000px;
-	width: 100%;
-	position: fixed;
-	top: 100px;
-	bottom: 100px;
-	left: 50%;
-	transform: translate(-50%, 0);
+	background: #fff;
+	padding: 35px;
+	transition: all 0.22s ease-in-out;
 	overflow: auto;
-	display: block;
-	z-index: 1000;
-	box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
-	opacity: 0;
-	transition: opacity .3s ease-in-out;
-	padding: 40px 50px;
-	cursor: default;
+	border: none;
 	font-size: 16px;
 
-	@media screen and (max-width: 1100px) {
-		top: 0;
-		bottom: 0;
+	@media screen and (max-width: 800px) {
+		max-height: calc(~"100vh - 30px");
+		width: calc(~"100% - 30px");
 	}
 
 	&.show {
