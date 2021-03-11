@@ -12,23 +12,28 @@ class CyclySystem extends HfCore\System {
 	}
 
 	/**
-	 * Cashordner leeren
+	 * Cashordner komplett leeren
 	 */
-	public function cleanCacheForce(){
-		if(!$this->isAdmin())
-			throw new Exception('Kein Zugriff',403);
+	public function cleanCacheForce() {
+		if (!$this->isAdmin())
+			throw new Exception('Kein Zugriff', 403);
 
-		$this->cleanCache('P0D');
+		$this->cleanCache('P0D', 10000);
 	}
 
 	/**
 	 * Cashordner aufräumen
 	 * @param string $maxAge
+	 * @param int $maxCount Maximale Anzahl an Files welche pro Durchgang gelöscht werden
 	 */
-	public function cleanCache($maxAge = 'P7D') {
+	public function cleanCache($maxAge = 'P7D', $maxCount = 20) {
 		foreach (\HfCore\IO::getFolder(HfCore\System::getInstance()->getPluginCachePath())->getFiles() as $file) {
-			if ($file->getLastChange() < HfCore\Time::goBack($maxAge))
+			if ($file->getLastChange() < HfCore\Time::goBack($maxAge)) {
 				$file->delete();
+
+				if (--$maxCount < 0)
+					return;
+			}
 		}
 	}
 
