@@ -15,7 +15,7 @@ trait CyclyFrontendVehicles {
 	 */
 	public function tagVehicles($atts): string {
 		// Parameter
-		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR,'') == 'true'  ? true : false;
+		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR, '') == 'true' ? true : false;
 		$attCategories = Query::param($atts, 'categories', HfCore\T_STR, '');
 		$attManufacturers = Query::param($atts, 'manufacturers', HfCore\T_STR, '');
 		$attTypes = Query::param($atts, 'types', HfCore\T_STR, '');
@@ -51,6 +51,7 @@ trait CyclyFrontendVehicles {
 
 		// Hersteller
 		$manufacturers = $this->getManufactures($branch);
+		asort($manufacturers);
 		$mFilter = new VehicleFilter($vehicles, 'manufacturerKey', $manufacturers, 'Hersteller:');
 
 		if (!empty($attManufacturers))
@@ -75,7 +76,7 @@ trait CyclyFrontendVehicles {
 		new VehicleFilter($vehicles, 'typeId', $types, 'Typ:');
 
 		// Body
-		$body = HtmlNode::div()->addClass('cycly-vehicles')->data('limit',$attLimit);
+		$body = HtmlNode::div()->addClass('cycly-vehicles')->data('limit', $attLimit);
 
 		// Vehicles
 		$items = HtmlNode::div()->addClass('items')->hide()->appendTo($body);
@@ -238,16 +239,16 @@ trait CyclyFrontendVehicles {
 			->appendTo($dl);
 
 		HtmlNode::dd()
-			->setText('ja')
+			->setText('Ja')
 			//->setText($vehicle->warranty)
 			->appendTo($dl);
 
 		HtmlNode::dt()
-			->setText('Im Laden:')
+			->setText('Verfügbar:')
 			->appendTo($dl);
 
 		HtmlNode::dd()
-			->setText(!$vehicle->stock && $vehicle->deliveryDate ? 'Liefertermin: '.$vehicle->deliveryDate->format('Y-m-d H:i:s') : $vehicle->stock)
+			->setText($vehicle->stock ? 'Ja' : ($vehicle->deliveryDate ? 'Liefertermin: '.$vehicle->deliveryDate->format('Y-m-d H:i:s') : 'Nein'))
 			->appendTo($dl);
 
 		// Spezifikationen
