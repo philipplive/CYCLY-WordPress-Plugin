@@ -264,11 +264,14 @@ trait CyclyFrontendVehicles {
 		$dl = HtmlNode::dl()
 			->appendTo($container);
 
-		foreach (['Kategorie' => 'category', 'Jahr' => 'year', 'Farbe' => 'color', 'Rahmengrösse' => 'frameSize', 'Radgrösse' => 'wheelSize', 'Gewicht' => 'weight', 'Grösse' => 'height', 'Bremsen' => 'brakes', 'Schaltung' => 'shifting', 'Motor' => 'engine', 'Batterie' => 'battery'] as $title => $property) {
+		foreach (['Kategorie' => 'category', 'Jahr' => 'year', 'Farbe' => 'color', 'Rahmengrösse' => 'frameSizeFormated', 'Radgrösse' => 'wheelSize', 'Gewicht' => 'weight', 'Grösse' => 'height', 'Bremsen' => 'brakes', 'Schaltung' => 'shifting', 'Motor' => 'engine', 'Batterie' => 'battery'] as $title => $property) {
 			$value = $vehicle->$property;
 
 			if (!$value || $value == '-' || $value == '0 kg')
 				continue;
+
+			if($property == 'wheelSize')
+				$value .= '"';
 
 			HtmlNode::dt()
 				->setText($title.':')
