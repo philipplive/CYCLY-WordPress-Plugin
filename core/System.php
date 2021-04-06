@@ -2,11 +2,29 @@
 namespace HfCore;
 
 class System {
+	/**
+	 * @var System
+	 */
 	protected static $instance;
 
+	/**
+	 * @var Cronjob
+	 */
 	private $cronjobs = null;
+
+	/**
+	 * @var Template
+	 */
 	private $template = null;
+
+	/**
+	 * @var Api
+	 */
 	private $api = null;
+	/**
+	 * @var Cache
+	 */
+	private $cache = null;
 
 	public function __construct() {
 		if (isset(self::$instance))
@@ -36,6 +54,7 @@ class System {
 		require_once('io/FolderAbstract.php');
 		require_once('io/FolderLocal.php');
 		require_once('CurlClient.php');
+		require_once('Cache.php');
 
 		// Libs
 		require_once('libs/lessc.inc.php');
@@ -94,6 +113,14 @@ class System {
 		}
 
 		return $this->template;
+	}
+
+	public function getCacheController(string $name = ''): Cache {
+		if(!$this->cache){
+			$this->cache = new Cache($name);
+		}
+
+		return $this->cache;
 	}
 
 	/**

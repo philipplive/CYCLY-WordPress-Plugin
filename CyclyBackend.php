@@ -98,7 +98,7 @@ class CyclyBackend extends CyclySystem {
 			'cycly_cache_age',
 			'Cachedauer (in Stunden)',
 			function () {
-				echo HfCore\HtmlNode::input()->attr('name', 'cycly_cache_age')->attr('type', 'number')->attr('min','1')->attr('step','1')->addClass('large')->value(get_option('cycly_cache_age') ? get_option('cycly_cache_age') : '1');
+				echo HfCore\HtmlNode::input()->attr('name', 'cycly_cache_age')->attr('type', 'number')->attr('min', '1')->attr('step', '1')->addClass('large')->value(get_option('cycly_cache_age') ? get_option('cycly_cache_age') : '1');
 			},
 			'cylcy_settings_more',
 			'cylcy_settings_more_section'
@@ -116,6 +116,7 @@ class CyclyBackend extends CyclySystem {
 				<div class="card" style="opacity: 0.5;">
 				<h3>Debug</h3>
 					<p>Files im Cache: '.count(\HfCore\IO::getFolder(\HfCore\System::getInstance()->getPluginCachePath())->getFiles()).'</p>
+					<p>WP Transients: '.count(\HfCore\System::getInstance()->getCacheController('cycly')->getAll()).'</p>
 				</div>
 				';
 			},

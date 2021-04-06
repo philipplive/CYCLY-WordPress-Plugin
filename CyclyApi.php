@@ -53,15 +53,15 @@ class CyclyApi {
 		$identifier[] = is_array($method) ? implode('/', $method) : $method;
 		$identifier[] = $type;
 		$identifier[] = print_r($data, true);
-		$id = 'cycly_'.md5(implode('|', $identifier));
+		$id = md5(implode('|', $identifier));
 
-		$result = get_transient($id);
+		$result = \HfCore\System::getInstance()->getCacheController()->get($id);
 
 		if ($result)
 			return $result;
 
 		$result = self::request($method, $type, $data);
-		set_transient($id, $result, $maxAge);
+		\HfCore\System::getInstance()->getCacheController()->set($id, $result, $maxAge);
 
 		return $result;
 	}

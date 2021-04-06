@@ -3,6 +3,7 @@
 class CyclySystem extends HfCore\System {
 	public function __construct() {
 		parent::__construct();
+		\HfCore\System::getInstance()->getCacheController('cycly');
 
 		$this->getCronjobController()->addCronjob('cycly-cronjob', [$this, 'cleanCache']);
 		$this->addWidget('CyclyWidget');
@@ -22,11 +23,16 @@ class CyclySystem extends HfCore\System {
 	}
 
 	/**
-	 * Cashordner aufräumen
+	 * Cash aufräumen
 	 * @param string $maxAge
 	 * @param int $maxCount Maximale Anzahl an Files welche pro Durchgang gelöscht werden
 	 */
 	public function cleanCache($maxAge = 'P7D', $maxCount = 20) {
+		// Transients
+		foreach (\HfCore\System::getInstance()->getCacheController()->getAll() as $item)
+			\HfCore\System::getInstance()->getCacheController()->delete($item);
+
+		// Files
 		foreach (\HfCore\IO::getFolder(HfCore\System::getInstance()->getPluginCachePath())->getFiles() as $file) {
 			if ($file->getLastChange() < HfCore\Time::goBack($maxAge)) {
 				$file->delete();
