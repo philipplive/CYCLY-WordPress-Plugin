@@ -94,7 +94,7 @@ class CurlClient {
         if (!$this->url && !$identifier)
             throw new \Exception('Kein Identifier für Cache oder URL gesetzt');
 
-        $this->cache = Cache::db($type ? $type : 'curl', $identifier ? $identifier : $this->url, $maxAge);
+        $this->cache = SystemCache::db($type ? $type : 'curl', $identifier ? $identifier : $this->url, $maxAge);
         return $this;
     }
 

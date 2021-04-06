@@ -29,8 +29,8 @@ class CyclySystem extends HfCore\System {
 	 */
 	public function cleanCache($maxAge = 'P7D', $maxCount = 20) {
 		// Transients
-		foreach (\HfCore\System::getInstance()->getCacheController()->getAll() as $item)
-			\HfCore\System::getInstance()->getCacheController()->delete($item);
+		foreach ($this->getCacheController()->getAll() as $item)
+			$this->getCacheController()->delete($item);
 
 		// Files
 		foreach (\HfCore\IO::getFolder(HfCore\System::getInstance()->getPluginCachePath())->getFiles() as $file) {

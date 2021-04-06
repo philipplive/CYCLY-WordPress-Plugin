@@ -22,7 +22,7 @@ class System {
 	 */
 	private $api = null;
 	/**
-	 * @var Cache
+	 * @var SystemCache
 	 */
 	private $cache = null;
 
@@ -47,6 +47,7 @@ class System {
 		require_once('HtmlNode.php');
 		require_once('Validator.php');
 		require_once('Image.php');
+		require_once('SystemCache.php');
 		require_once('io/IO.php');
 		require_once('io/FileInfo.php');
 		require_once('io/FileAbstract.php');
@@ -54,7 +55,6 @@ class System {
 		require_once('io/FolderAbstract.php');
 		require_once('io/FolderLocal.php');
 		require_once('CurlClient.php');
-		require_once('Cache.php');
 
 		// Libs
 		require_once('libs/lessc.inc.php');
@@ -115,9 +115,9 @@ class System {
 		return $this->template;
 	}
 
-	public function getCacheController(string $name = ''): Cache {
+	public function getCacheController(string $name = ''): SystemCache {
 		if(!$this->cache){
-			$this->cache = new Cache($name);
+			$this->cache = new SystemCache($name);
 		}
 
 		return $this->cache;

@@ -4,7 +4,7 @@ namespace HfCore;
 /**
  * Cache
  */
-class Cache {
+class SystemCache {
 	/**
 	 * @var string
 	 */
