@@ -7,10 +7,13 @@ namespace HfCore;
 class Template {
 	public $cssFiles = [];
 	public $jsFiles = [];
+	public $system;
 
-	public function __construct() {
+	public function __construct(System $system) {
 		add_action('admin_enqueue_scripts', [$this, 'drawScripts']);
 		add_action('wp_enqueue_scripts', [$this, 'drawScripts']);
+
+		$this->system = $system;
 	}
 
 	/**
@@ -22,7 +25,7 @@ class Template {
 		$fileOut = str_replace('.less', '.css', $fileOut);
 
 		$less = new \hf_lessc();
-		$less->checkedCompile(System::getInstance()->getPluginPath().$file, System::getInstance()->getPluginCachePath().$fileOut);
+		$less->checkedCompile($this->system->getPluginPath().$file, System::getInstance()->getPluginCachePath().$fileOut);
 
 		$this->cssFiles[] = $fileOut;
 
@@ -41,10 +44,10 @@ class Template {
 
 	public function drawScripts() {
 		foreach ($this->cssFiles as $file)
-			wp_enqueue_style(System::getInstance()->getPluginName().'-'.str_replace('.', '-', $file), System::getInstance()->getPluginCacheUrl().$file);
+			wp_enqueue_style($this->system->getPluginName().'-'.str_replace('.', '-', $file), System::getInstance()->getPluginCacheUrl().$file);
 
 		foreach ($this->jsFiles as $file)
-			wp_enqueue_script(System::getInstance()->getPluginName().'-'.str_replace('.', '-', $file), System::getInstance()->getPluginUrl().$file);
+			wp_enqueue_script($this->system->getPluginName().'-'.str_replace('.', '-', $file), System::getInstance()->getPluginUrl().$file);
 	}
 
 	/**

@@ -3,7 +3,7 @@
 class CyclySystem extends HfCore\System {
 	public function __construct() {
 		parent::__construct();
-		\HfCore\System::getInstance()->getCacheController('cycly');
+		$this->getCacheController('cycly');
 
 		$this->getCronjobController()->addCronjob('cycly-cronjob', [$this, 'cleanCache']);
 		$this->addWidget('CyclyWidget');
@@ -33,7 +33,7 @@ class CyclySystem extends HfCore\System {
 			$this->getCacheController()->delete($item);
 
 		// Files
-		foreach (\HfCore\IO::getFolder(HfCore\System::getInstance()->getPluginCachePath())->getFiles() as $file) {
+		foreach (\HfCore\IO::getFolder($this->getPluginCachePath())->getFiles() as $file) {
 			if ($file->getLastChange() < HfCore\Time::goBack($maxAge)) {
 				$file->delete();
 

@@ -13,20 +13,24 @@ trait CyclyFrontendEmployees {
 	 * @return HtmlNode
 	 */
 	public function tagEmployees($atts) {
-		$branch = Query::param($atts, 'branch', HfCore\T_INT, 1);
-		$body = HtmlNode::div()->id('cycly-employees')->data('branch', $branch);
+		try {
+			$branch = Query::param($atts, 'branch', HfCore\T_INT, 1);
+			$body = HtmlNode::div()->id('cycly-employees')->data('branch', $branch);
 
-		foreach ($this->getEmployees($branch) as $emplyee) {
-			$item = HtmlNode::div()->addClass('employee')->appendTo($body);
+			foreach ($this->getEmployees($branch) as $emplyee) {
+				$item = HtmlNode::div()->addClass('employee')->appendTo($body);
 
-			if ($emplyee->image)
-				$item->append(HtmlNode::img()->attr('src', $emplyee->image->getResizedImageLink(300,300,\HfCore\Image::RESIZE_CROP))->attr('title', $emplyee->image->title));
-			else
-				$item->append(HtmlNode::img()->attr('src', $this->getPluginUrl().'/tpl/employee-empty.jpg')->attr('title', 'Kein Titel'));
+				if ($emplyee->image)
+					$item->append(HtmlNode::img()->attr('src', $emplyee->image->getResizedImageLink(300, 300, \HfCore\Image::RESIZE_CROP))->attr('title', $emplyee->image->title));
+				else
+					$item->append(HtmlNode::img()->attr('src', $this->getPluginUrl().'/tpl/employee-empty.jpg')->attr('title', 'Kein Titel'));
 
-			$item->append(HtmlNode::p($emplyee->firstname.' '.$emplyee->lastname)->addClass('name'));
+				$item->append(HtmlNode::p($emplyee->firstname.' '.$emplyee->lastname)->addClass('name'));
+			}
+
+			return $body;
+		} catch (\Exception $ex) {
+			return $this->show_error($ex);
 		}
-
-		return $body;
 	}
 }

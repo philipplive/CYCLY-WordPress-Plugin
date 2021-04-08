@@ -29,9 +29,10 @@ class CyclyApi {
 
 		//print_r($jsonResult);
 
-		if ($result->httpCode != 200) {
-			throw new \Exception('Cycly-API Error: '.$jsonResult->error->message, $jsonResult->error->code);
-		}
+		if ($result->httpCode == 403)
+			throw new AccessException();
+		if ($result->httpCode != 200)
+			throw new ApiException();
 
 		return $jsonResult;
 	}
@@ -65,4 +66,12 @@ class CyclyApi {
 
 		return $result;
 	}
+}
+
+class AccessException extends \Exception {
+
+}
+
+class ApiException extends \Exception {
+
 }

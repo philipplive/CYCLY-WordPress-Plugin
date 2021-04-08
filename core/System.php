@@ -3,9 +3,11 @@ namespace HfCore;
 
 class System {
 	/**
-	 * @var System
+	 * Aktuelle Systeminstanzen.
+	 * Sind mehrere Plugins aktiv welche den HFCore verwenden, so wird jede Systeminstanz hier separat instanziert
+	 * @var System[]
 	 */
-	protected static $instance;
+	protected static $instance = [];
 
 	/**
 	 * @var Cronjob
@@ -26,9 +28,15 @@ class System {
 	 */
 	private $cache = null;
 
+	/**
+	 * Name des Plugins
+	 * @var string
+	 */
+	private $pluginName;
+
 	public function __construct() {
-		if (isset(self::$instance))
-			throw new Exception('System-Instanz existiert bereits');
+		if (count(self::$instance))
+			throw new \Exception('System-Instanz existiert bereits');
 
 		// Datentypen
 		define('HFCore\T_BOOL', 'b');
@@ -59,19 +67,24 @@ class System {
 		// Libs
 		require_once('libs/lessc.inc.php');
 
+		// Plugin Name
+		$this->pluginName = explode('/',explode('/wp-content/plugins/',debug_backtrace()[0]['file'])[1])[0];
+
 		// Instanz übertragen
-		self::$instance = $this;
+		self::$instance[$this->getPluginName()] = $this;
 	}
 
 	/**
-	 * Gibt Instanz von System zurück
-	 * @return self
+	 * Gibt Instanz des Systems zurück
+	 * @return static
 	 */
 	public static function getInstance(): self {
-		if (!isset(self::$instance))
+		$pluginName = explode('/',explode('/wp-content/plugins/',debug_backtrace()[0]['file'])[1])[0];
+
+		if (!isset(self::$instance[$pluginName]))
 			die('System nicht instanziert');
 
-		return self::$instance;
+		return self::$instance[$pluginName];
 	}
 
 	public function getCronjobController(): Cronjob {
@@ -86,7 +99,7 @@ class System {
 	public function getApi(): Api {
 		if (!$this->api) {
 			require_once('Api.php');
-			$this->api = new Api();
+			$this->api = new Api($this);
 		}
 
 		return $this->api;
@@ -108,7 +121,7 @@ class System {
 	public function getTemplateController(): Template {
 		if (!$this->template) {
 			require_once('Template.php');
-			$this->template = new Template();
+			$this->template = new Template($this);
 			$this->template->addJsFile('core/system.js');
 		}
 
@@ -116,7 +129,7 @@ class System {
 	}
 
 	public function getCacheController(string $name = ''): SystemCache {
-		if(!$this->cache){
+		if (!$this->cache) {
 			$this->cache = new SystemCache($name);
 		}
 
@@ -128,7 +141,7 @@ class System {
 	 * @return string
 	 */
 	public function getPluginName(): string {
-		return explode('/', plugin_basename(__FILE__))[0];
+		return $this->pluginName;
 	}
 
 	/**
@@ -146,7 +159,6 @@ class System {
 	public function getPluginCachePath(string $folder = ''): string {
 		if ($folder && substr($folder, -1) != '/')
 			$folder .= '/';
-
 
 		return $this->getPluginPath().'/cache/'.$folder;
 	}

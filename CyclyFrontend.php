@@ -19,4 +19,21 @@ class CyclyFrontend extends CyclySystem  {
 		// Api Endpunkte
 		$this->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
 	}
+
+	/**
+	 * @param Exception $ex
+	 * @return string
+	 * @throws Exception
+	 */
+	public function show_error(Exception $ex){
+		if(\HfCore\System::getInstance()->isAdmin())
+			throw $ex;
+
+		if($ex instanceof \Cycly\ApiException)
+			return 'Unbekannter CYCLY API Fehler';
+		if($ex instanceof \Cycly\AccessException)
+			return 'CYCLY Berechtigungsfehler';
+
+		throw $ex;
+	}
 }
