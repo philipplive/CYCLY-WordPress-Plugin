@@ -273,6 +273,9 @@ trait CyclyFrontendVehicles {
 			if($property == 'wheelSize')
 				$value .= '"';
 
+			if($property == 'weight')
+				$value .= ' Kg';
+
 			HtmlNode::dt()
 				->setText($title.':')
 				->appendTo($dl);
@@ -527,7 +530,7 @@ class VehicleFilter {
 
 		$label = HtmlNode::label()
 			->append(HtmlNode::span($this->title)->addClass('title'))
-			->addClass('filter')
+			->addClass('filter select-filter')
 			->append($select);
 
 		return $label;

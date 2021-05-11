@@ -113,7 +113,7 @@
 			grid-template-columns: 1fr;
 		}
 
-		label {
+		.filter {
 			display: flex;
 			background: #fcfcfc;
 			border: 1px solid #e2e2e2;
@@ -126,6 +126,28 @@
 			align-items: stretch;
 			margin-bottom: 0;
 			font-size: 16px;
+			position: relative;
+
+			&.select-filter {
+				&::after {
+					border-left: 5px solid transparent;
+					border-right: 5px solid transparent;
+					border-top: 5px solid #000;
+					opacity: 0.5;
+					border-bottom: none;
+					height: 15px;
+					right: 30px;
+					content: '';
+					position: absolute;
+					top: calc(50% - 5px);
+				}
+
+				select {
+					-webkit-appearance: none;
+					-moz-appearance: none;
+					appearance: none;
+				}
+			}
 
 			.title {
 				margin-right: 5px;
