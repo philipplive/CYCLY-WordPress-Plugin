@@ -41,7 +41,7 @@ class GitHub {
 		return $vars;
 	}
 
-	private function downloadMasterZip() : FileLocal {
+	private function downloadMasterZip(): FileLocal {
 		$data = $this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']]);
 		$url = sprintf('https://codeload.github.com/%s/zip/refs/heads/master', $data->full_name);
 
@@ -52,20 +52,34 @@ class GitHub {
 	 * Instanz updaten
 	 */
 	public function update() {
+		$this->checkUpdateFunctionality();
+
 		$file = $this->downloadMasterZip();
 
+		$tmp = IO::getFolder($this->system->getPluginCachePath('update'));
+
+		// Entpacken
 		$zip = new \ZipArchive;
 		if ($zip->open($file->getPath()) === true) {
-			$zip->extractTo($this->system->getPluginCachePath('test'));
+			$zip->extractTo($tmp);
 			$zip->close();
-		} else {
+		}
+		else {
 			throw new \Exception('Fehler beim entpacken');
 		}
+
+		// Verschieben und ersetzen
+		$tmp->getClone()->cd($this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']])->full_name.'-master')->copy(IO::getFolder($this->system->getPluginPath()));
+
+		// Tmp löschen
+		$tmp->delete();
 	}
 
 	public function checkUpdateFunctionality(): bool {
 		if (!class_exists('\ZipArchive'))
 			throw new \Exception('ZipArchive nicht vorhanden');
+
+		return true;
 	}
 
 	/**
