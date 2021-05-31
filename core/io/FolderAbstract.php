@@ -114,7 +114,7 @@ abstract class FolderAbstract extends FileInfo {
 
 		$newfolder = $this->getParentFolder()->getFolder($newname);
 		if ($newfolder->exists())
-			throw new SystemException(sprintf('Ein Ordner mit dem Namen "%s" existiert bereits', $newfolder->getName()), 409);
+			throw new \Exception(sprintf('Ein Ordner mit dem Namen "%s" existiert bereits', $newfolder->getName()), 409);
 
 		$this->renameFolder($newfolder->getName(), $newfolder->getPath());
 		$this->setName($newfolder->getName());
@@ -152,7 +152,7 @@ abstract class FolderAbstract extends FileInfo {
 		$path = $this->getParentPath();
 
 		if (!$path)
-			throw new SystemException('Ordner hat keinen übergeordneten Ordner');
+			throw new \Exception('Ordner hat keinen übergeordneten Ordner');
 
 		return IO::getFolder($path, $this->getStream());
 	}
@@ -227,11 +227,11 @@ abstract class FolderAbstract extends FileInfo {
 	/**
 	 * Ordnername prüfen
 	 * @param string $name
-	 * @throws SystemException
+	 * @throws \Exception
 	 */
 	public static function checkName(?string $name) {
 		if (strpos($name, '/') !== false || strpos($name, '\\') !== false)
-			throw new SystemException(sprintf('Ungültiger Ordnername: "%s"', $name));
+			throw new \Exception(sprintf('Ungültiger Ordnername: "%s"', $name));
 	}
 
 	/**
@@ -247,7 +247,7 @@ abstract class FolderAbstract extends FileInfo {
 
 		// TODO wenn ordner "/.../" heisst, wird dies fehlerhaft erkannt
 		if (strpos($path, './') !== false)
-			throw new SystemException(sprintf('Ungültiger Pfad: "%s"', $path));
+			throw new \Exception(sprintf('Ungültiger Pfad: "%s"', $path));
 
 		if ($path == '')
 			$path = '/';

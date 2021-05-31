@@ -23,10 +23,16 @@ class System {
 	 * @var Api
 	 */
 	private $api = null;
+
 	/**
 	 * @var SystemCache
 	 */
 	private $cache = null;
+
+	/**
+	 * @var GitHub
+	 */
+	private $github = null;
 
 	/**
 	 * Name des Plugins
@@ -103,6 +109,15 @@ class System {
 		}
 
 		return $this->api;
+	}
+
+	public function getGitHub(): GitHub {
+		if (!$this->github) {
+			require_once('GitHub.php');
+			$this->github = new GitHub($this);
+		}
+
+		return $this->github;
 	}
 
 	/**

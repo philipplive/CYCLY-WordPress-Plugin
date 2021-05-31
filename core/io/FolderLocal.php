@@ -46,12 +46,12 @@ class FolderLocal extends FolderAbstract {
 	/**
 	 * Dateien und Ordner auslesen
 	 * @return FileLocal[]|FolderLocal[]
-	 * @throws SystemException
+	 * @throws Exception
 	 */
 	public function getFilesAndFolders() {
 		$dh = opendir($this->getPath());
 		if (!$dh)
-			throw new SystemException('Fehler beim Öffnen von Verzeichnis');
+			throw new Exception('Fehler beim Öffnen von Verzeichnis');
 
 		$items = [];
 		while (($file = readdir($dh)) !== false) {
@@ -84,17 +84,17 @@ class FolderLocal extends FolderAbstract {
 
 	protected function createFolder() {
 		if (!mkdir($this->getPath()))
-			throw new SystemException(sprintf('Ordner "%s" konnte nicht erstellt werden', $this->getPath()));
+			throw new Exception(sprintf('Ordner "%s" konnte nicht erstellt werden', $this->getPath()));
 	}
 
 	protected function deleteFolder() {
 		if (!rmdir($this->getPath()))
-			throw new SystemException(sprintf('Ordner "%s" konnte nicht gelöscht werden', $this->getPath()));
+			throw new Exception(sprintf('Ordner "%s" konnte nicht gelöscht werden', $this->getPath()));
 	}
 
 	protected function renameFolder($newname, $newpath) {
 		if (!rename($this->getPath(), $newpath))
-			throw new SystemException(sprintf('Ordner "%s" konnte nicht umbenannt werden', $this->getPath()));
+			throw new Exception(sprintf('Ordner "%s" konnte nicht umbenannt werden', $this->getPath()));
 	}
 
 	protected function readRAWInfo($name) {
@@ -117,19 +117,19 @@ class FolderLocal extends FolderAbstract {
 		switch ($name) {
 			case 'chmod':
 				if (!chmod($this->getPath(), octdec(sprintf('%04d', $value))))
-					throw new SystemException(sprintf('Fehler bei Chmod von Ordner "%s"', $this->getPath()));
+					throw new Exception(sprintf('Fehler bei Chmod von Ordner "%s"', $this->getPath()));
 
 				return;
 
 			case 'owner':
 				if (!chown($this->getPath(), $value))
-					throw new SystemException(sprintf('Fehler bei Chown von Ordner "%s"', $this->getPath()));
+					throw new Exception(sprintf('Fehler bei Chown von Ordner "%s"', $this->getPath()));
 
 				return;
 
 			case 'group':
 				if (!chgrp($this->getPath(), $value))
-					throw new SystemException(sprintf('Fehler bei Chgrp von Ordner "%s"', $this->getPath()));
+					throw new Exception(sprintf('Fehler bei Chgrp von Ordner "%s"', $this->getPath()));
 
 				return;
 		}
@@ -146,7 +146,7 @@ class FolderLocal extends FolderAbstract {
 		$handle = opendir($folder);
 
 		if (!$handle)
-			throw new \SystemException('Handle ist null, Fehlt der Autoinstall-Ordner?');
+			throw new \Exception('Handle ist null, Fehlt der Autoinstall-Ordner?');
 
 		while (false !== $f = readdir($handle)) {
 			if ($f != '.' && $f != '..') {

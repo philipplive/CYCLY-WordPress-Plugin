@@ -7,7 +7,7 @@ abstract class IO {
 	 * @param string $path
 	 * @param null|\FTP|\SSH|\SFTP|\Powershell $stream
 	 * @return \FileLocal|\FileFTP|\FileSSH|\FileSFTP|\FilePowershell
-	 * @throws SystemException
+	 * @throws Exception
 	 */
 	public static function getFile($path, $stream = null): FileAbstract {
 		if ($path instanceof FileAbstract)
@@ -24,7 +24,7 @@ abstract class IO {
 		else if ($stream instanceof \Powershell)
 			return new FilePowershell($path, $stream);
 
-		throw new SystemException('Filetreiber nicht gefunden ('.get_class($stream).')');
+		throw new Exception('Filetreiber nicht gefunden ('.get_class($stream).')');
 	}
 
 	/**
@@ -93,7 +93,7 @@ abstract class IO {
 	 * @param string $path
 	 * @param null|\FTP|\SSH|\SFTP|\Powershell $stream
 	 * @return \FolderLocal|\FolderFTP|\FolderSSH|\FolderSFTP|\FolderPowershell
-	 * @throws SystemException
+	 * @throws Exception
 	 */
 	public static function getFolder($path, $stream = null): FolderAbstract {
 		if ($path instanceof FolderAbstract)
@@ -110,7 +110,7 @@ abstract class IO {
 		else if ($stream instanceof \Powershell)
 			return new FolderPowershell($path, $stream);
 
-		throw new SystemException('Filetreiber nicht gefunden ('.get_class($stream).')');
+		throw new Exception('Filetreiber nicht gefunden ('.get_class($stream).')');
 	}
 
 	/**

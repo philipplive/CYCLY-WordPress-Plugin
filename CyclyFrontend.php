@@ -18,6 +18,8 @@ class CyclyFrontend extends CyclySystem  {
 
 		// Api Endpunkte
 		$this->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);
+
+		print_r($this->getGitHub()->update());
 	}
 
 	/**

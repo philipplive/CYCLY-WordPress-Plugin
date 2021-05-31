@@ -17,7 +17,7 @@ class FileLocal extends FileAbstract {
 
 	protected function deleteFile() {
 		if (!unlink($this->getPath()))
-			throw new SystemException(sprintf('Datei "%s" konnte nicht gelöscht werden', $this->getPath()));
+			throw new Exception(sprintf('Datei "%s" konnte nicht gelöscht werden', $this->getPath()));
 	}
 
 	protected function touchFile(?\DateTime $time = null) {
@@ -25,20 +25,20 @@ class FileLocal extends FileAbstract {
 			$time = new DateTime();
 
 		if (!touch($this->getPath(), $time->getTimestamp()))
-			throw new SystemException(sprintf('Fehler beim Touch von Datei "%s"', $this->getPath()));
+			throw new Exception(sprintf('Fehler beim Touch von Datei "%s"', $this->getPath()));
 	}
 
 	protected function renameFile($newname, $newpath) {
 		if (!rename($this->getPath(), $newpath))
-			throw new SystemException(sprintf('Datei "%s" konnte nicht umbenannt werden', $this->getPath()));
+			throw new Exception(sprintf('Datei "%s" konnte nicht umbenannt werden', $this->getPath()));
 	}
 
 	protected function writeContent($content) {
 		if (!$stream = fopen($this->getPath(), 'w+'))
-			throw new SystemException(sprintf('Fehler beim Öffnen der Datei "%s"', $this->getPath()));
+			throw new Exception(sprintf('Fehler beim Öffnen der Datei "%s"', $this->getPath()));
 
 		if (fwrite($stream, $content) === false)
-			throw new SystemException(sprintf('Fehler beim Schreiben der Datei "%s"', $this->getPath()));
+			throw new Exception(sprintf('Fehler beim Schreiben der Datei "%s"', $this->getPath()));
 
 		fclose($stream);
 	}
@@ -47,7 +47,7 @@ class FileLocal extends FileAbstract {
 		$data = file_get_contents($this->getPath());
 
 		if ($data === false)
-			throw new SystemException(sprintf('Fehler beim Öffnen der Datei "%s"', $this->getPath()));
+			throw new Exception(sprintf('Fehler beim Öffnen der Datei "%s"', $this->getPath()));
 
 		return $data;
 	}
@@ -79,19 +79,19 @@ class FileLocal extends FileAbstract {
 		switch ($name) {
 			case 'chmod':
 				if (!chmod($this->getPath(), octdec(sprintf('%04d', $value))))
-					throw new SystemException(sprintf('Fehler bei Chmod von Datei "%s"', $this->getPath()));
+					throw new Exception(sprintf('Fehler bei Chmod von Datei "%s"', $this->getPath()));
 
 				return;
 
 			case 'owner':
 				if (!chown($this->getPath(), $value))
-					throw new SystemException(sprintf('Fehler bei Chown von Datei "%s"', $this->getPath()));
+					throw new Exception(sprintf('Fehler bei Chown von Datei "%s"', $this->getPath()));
 
 				return;
 
 			case 'group':
 				if (!chgrp($this->getPath(), $value))
-					throw new SystemException(sprintf('Fehler bei Chgrp von Datei "%s"', $this->getPath()));
+					throw new Exception(sprintf('Fehler bei Chgrp von Datei "%s"', $this->getPath()));
 
 				return;
 		}

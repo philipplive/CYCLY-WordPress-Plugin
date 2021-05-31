@@ -74,7 +74,7 @@ abstract class FileAbstract extends FileInfo {
 		self::checkName($newname);
 		$newfile = $this->getFolder()->getFile($newname);
 		if ($newfile->exists())
-			throw new SystemException(sprintf('Eine Datei mit dem Namen "%s" existiert bereits', $newfile->getName()), 409);
+			throw new Exception(sprintf('Eine Datei mit dem Namen "%s" existiert bereits', $newfile->getName()), 409);
 
 		$this->renameFile($newfile->getName(), $newfile->getPath());
 		$this->setName($newfile->getName());
@@ -113,7 +113,7 @@ abstract class FileAbstract extends FileInfo {
 		if ($target instanceof FileAbstract)
 			$this->copyFile($target, $replace);
 		else
-			throw new SystemException('Unbekanntes Ziel');
+			throw new Exception('Unbekanntes Ziel');
 
 		return $this;
 	}
@@ -230,7 +230,7 @@ abstract class FileAbstract extends FileInfo {
 
 	protected function copyFile(FileAbstract $target, $replace = false) {
 		if (!$replace && $target->exists())
-			throw new SystemException(sprintf('Datei "%s" exitiert bereits', $target->getPath()));
+			throw new Exception(sprintf('Datei "%s" exitiert bereits', $target->getPath()));
 
 		$target->write($this->read());
 	}
@@ -312,7 +312,7 @@ abstract class FileAbstract extends FileInfo {
 
 	public static function checkName(?string $name) {
 		if (strpos($name, '/') !== false || strpos($name, '\\') !== false)
-			throw new SystemException(sprintf('Ungültiger Dateiname: "%s"', $name));
+			throw new Exception(sprintf('Ungültiger Dateiname: "%s"', $name));
 	}
 
 	public static function fixPath(?string $path): ?string {
