@@ -16,7 +16,7 @@ class CyclyBackend extends CyclySystem {
 	public function addOptionPage() {
 		add_menu_page(
 			'CYCLY Optionen',
-			'CYCLY-Connector',
+			$this->getGitHub()->isUpToDate() ? 'CYCLY' : 'CYCLY <span class="update-plugins">!</span>',
 			'manage_options',
 			'cycly',
 			function () {
@@ -116,7 +116,7 @@ class CyclyBackend extends CyclySystem {
 				<div class="card" style="opacity: 0.5;">
 				<h3>Debug</h3>
 					<p>Files im Cache: '.count(\HfCore\IO::getFolder(\HfCore\System::getInstance()->getPluginCachePath())->getFiles()).'</p>
-					<p>WP Transients: '.count(\HfCore\System::getInstance()->getCacheController('cycly')->getAll()).'</p>
+					<p>WP Transients: '.count(\HfCore\System::getInstance()->getCacheController()->getAll()).'</p>
 				</div>
 				';
 			},

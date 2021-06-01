@@ -53,6 +53,7 @@ class System {
 
 		// Core-Klassen laden
 		require_once('Query.php');
+		require_once('Severity.php');
 		require_once('Price.php');
 		require_once('Time.php');
 		require_once('Image.php');
@@ -143,9 +144,9 @@ class System {
 		return $this->template;
 	}
 
-	public function getCacheController(string $name = ''): SystemCache {
+	public function getCacheController(): SystemCache {
 		if (!$this->cache) {
-			$this->cache = new SystemCache($name);
+			$this->cache = new SystemCache($this->getPluginName());
 		}
 
 		return $this->cache;

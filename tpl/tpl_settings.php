@@ -1,5 +1,17 @@
 <div class="wrap">
 	<h2>CYCLY Plugin</h2>
+	<?php if (!$this->getGitHub()->isUpToDate()) { ?>
+		<div class="update-nag notice notice-error inline">
+			Ein Update für CYCLY ist verfügbar.</br>
+			<form action="" method="post">
+				<input name="Submit" type="submit"
+					   value="Updaten"
+					   onclick="HfCore.request('cycly-connector/update');"
+					   class="button button-primary"/>
+			</form>
+		</div>
+	<?php } ?>
+
 	<div class="card">
 		<h2>Einleitung</h2>
 		<p>Folgende Module können auf der Website eingebunden werden:</p>
@@ -9,7 +21,8 @@
 			<li>- Öffnungszeiten-Widget im Widget Bereich</li>
 		</ul>
 		<h2>Wichtig</h2>
-		<p>Für den Betrieb müssen gültige API-Zugangsdaten hinterlegt werden. Diese finden Sie in Ihrem <a target="_blank" href="https://cycly.ch/tour/">Cycly Kundencenter</a>.</p>
+		<p>Für den Betrieb müssen gültige API-Zugangsdaten hinterlegt werden. Diese finden Sie in Ihrem <a
+					target="_blank" href="https://cycly.ch/tour/">Cycly Kundencenter</a>.</p>
 	</div>
 
 	<hr>

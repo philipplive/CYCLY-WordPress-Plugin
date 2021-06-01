@@ -20,7 +20,7 @@ class Template {
 	 * CSS-Files zur aktuellen Ausgabe hinzufügen (less wird geparst)
 	 * @param $file z.B. tpl/test.less
 	 */
-	public function addCssFile(string $file) : self {
+	public function addCssFile(string $file): self {
 		$fileOut = str_replace('/', '-', $file);
 		$fileOut = str_replace('.less', '.css', $fileOut);
 
@@ -72,5 +72,25 @@ class Template {
 			return null;
 
 		return html_entity_decode($str, (defined('ENT_HTML5') ? ENT_HTML5 : 0) | ENT_COMPAT, 'UTF-8');
+	}
+
+	/**
+	 * Notizbox anzeigen auf jeder Backend-Seite
+	 * @param string $txt
+	 * @param int $severity
+	 */
+	public static function addAdminNoticeBox(string $txt, int $severity = \Severity::WARNING) {
+		add_action('admin_notices', function () use ($txt,$severity) {
+			$class = 'notice';
+
+			if($severity == \Severity::WARNING)
+				$class .= ' notice-warning';
+			if($severity == \Severity::ERROR)
+				$class .= ' notice-error';
+			if($severity == \Severity::SUCCESS)
+				$class .= ' notice-success';
+
+			printf('<div class="%1$s"><p>%2$s</p></div>', $class, $txt);
+		});
 	}
 }

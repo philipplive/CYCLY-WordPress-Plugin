@@ -3,13 +3,14 @@
 class CyclySystem extends HfCore\System {
 	public function __construct() {
 		parent::__construct();
-		$this->getCacheController('cycly');
+		$this->getCacheController();
 
 		$this->getCronjobController()->addCronjob('cycly-cronjob', [$this, 'cleanCache']);
 		$this->addWidget('CyclyWidget');
 
 		// Api Endpunkte
 		$this->getApi()->addEndpoint('cleancache', [$this, 'cleanCacheForce']);
+		$this->getApi()->addEndpoint('update', [$this, 'updateSystem']);
 	}
 
 	/**
@@ -41,6 +42,13 @@ class CyclySystem extends HfCore\System {
 					return;
 			}
 		}
+	}
+
+	public function updateSystem(){
+		if (!$this->isAdmin())
+			throw new Exception('Kein Zugriff', 403);
+
+		$this->getGitHub()->update();
 	}
 
 	/**

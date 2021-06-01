@@ -54,6 +54,9 @@ class GitHub {
 	public function update() {
 		$this->checkUpdateFunctionality();
 
+		if ($this->isUpToDate())
+			throw new \Exception('Version bereits aktuell');
+
 		$file = $this->downloadMasterZip();
 
 		$tmp = IO::getFolder($this->system->getPluginCachePath('update'));
@@ -69,12 +72,20 @@ class GitHub {
 		}
 
 		// Verschieben und ersetzen
-		$tmp->getClone()->cd($this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']])->full_name.'-master')->copy(IO::getFolder($this->system->getPluginPath()));
+		$tmp->getClone()->cd($this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']])->name.'-master')->copy(IO::getFolder($this->system->getPluginPath()));
 
 		// Tmp löschen
-		$tmp->delete();
+		$tmp->getParentFolder()->clear();
+
+		// Cache leeren
+		foreach ($this->system->getCacheController()->getAll() as $item)
+			$this->system->getCacheController()->delete($item);
 	}
 
+	/**
+	 * Prüfe ob Update möglich
+	 * @return bool
+	 */
 	public function checkUpdateFunctionality(): bool {
 		if (!class_exists('\ZipArchive'))
 			throw new \Exception('ZipArchive nicht vorhanden');
@@ -85,10 +96,25 @@ class GitHub {
 	/**
 	 * Request zur GitHub API
 	 * @param array $query
+	 * @param int|null $maxAge in Sekunden
 	 * @return object
 	 */
-	public function githubApiRequest(array $query): object {
-		return CurlClient::create('https://api.github.com/'.implode('/', $query))->setUserAgent('User-Agent: Cycly')->exec()->getFromJSON();
+	public function githubApiRequest(array $query, ?int $maxAge = null): object {
+		$id = md5(implode('|', $query));
+
+		if ($maxAge) {
+			$result = $this->system->getCacheController()->get($id);
+
+			if ($result)
+				return $result;
+		}
+
+		$result = CurlClient::create('https://api.github.com/'.implode('/', $query))->setUserAgent('User-Agent: WordPress')->exec()->getFromJSON();
+
+		if ($maxAge)
+			$this->system->getCacheController()->set($id, $result, $maxAge);
+
+		return $result;
 	}
 
 	/**
@@ -108,6 +134,13 @@ class GitHub {
 	 * @return bool
 	 */
 	public function isUpToDate(): bool {
-		return $this->getVersion() == $this->getVersion(false);
+		$value = $this->system->getCacheController()->get('upToDate');
+
+		if ($value === false) {
+			$value = ($this->getVersion() == $this->getVersion(false)) ? 1 : 0;
+			$this->system->getCacheController()->set('upToDate', $value, 360);
+		}
+
+		return (bool)$value;
 	}
 }
