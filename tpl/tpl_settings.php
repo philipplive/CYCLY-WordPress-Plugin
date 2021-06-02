@@ -1,14 +1,9 @@
 <div class="wrap">
 	<h2>CYCLY Plugin</h2>
 	<?php if (!$this->getGitHub()->isUpToDate()) { ?>
-		<div class="update-nag notice notice-error inline">
+		<div class="update-nag notice notice-error inline cycly-update-dialog">
 			Ein Update für CYCLY ist verfügbar. Ihre Version </br> <?php echo $this->getGitHub()->getVersion(true);?> ist veraltet.
-			<form action="" method="post">
-				<input name="Submit" type="submit"
-					   value="Updaten"
-					   onclick="HfCore.request('cycly-connector/update');"
-					   class="button button-primary"/>
-			</form>
+			<a class="wp-core-ui button-primary" onclick="updateCycly();">Jetzt updaten</a>
 		</div>
 	<?php } ?>
 

@@ -8,6 +8,8 @@ class CyclyBackend extends CyclySystem {
 		add_action('admin_init', [$this, 'adminInit']);
 
 		$this->getTemplateController()->addCssFile('tpl/backend.less');
+		$this->getTemplateController()->addJsFile('tpl/cycly.js');
+		$this->getTemplateController()->addJsFile('tpl/backend.js');
 	}
 
 	/**

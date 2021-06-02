@@ -274,8 +274,3 @@ document.addEventListener("DOMContentLoaded", function () {
 		new BikeModule(item);
 	});
 });
-
-// Debug
-function l(log) {
-	console.log(log);
-}

@@ -17,3 +17,8 @@ class HfCore {
 		}).then(response => response.text());
 	}
 }
+
+// Debug
+function l(log) {
+	console.log(log);
+}

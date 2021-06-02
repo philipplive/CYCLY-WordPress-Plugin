@@ -45,6 +45,10 @@ class CyclySystem extends HfCore\System {
 	}
 
 	public function updateSystem(){
+		sleep(3);
+		echo "WAAAAA";
+		return;
+
 		if (!$this->isAdmin())
 			throw new Exception('Kein Zugriff', 403);
 
