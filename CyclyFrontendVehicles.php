@@ -94,7 +94,11 @@ trait CyclyFrontendVehicles {
 			$img = HtmlNode::div()->appendTo($bike)->addClass('item-image');
 
 			if (count($vehicle->images))
-				$img->setBackgroundImage($vehicle->images[0]->getResizedImageLink(500, 500));
+				try {
+					$img->setBackgroundImage($vehicle->images[0]->getResizedImageLink(500, 500));
+				} catch (\Exception $ex) {
+					$img->setBackgroundImage($this->getPluginUrl().'/tpl/vehicle-empty.png');
+				}
 			else
 				$img->setBackgroundImage($this->getPluginUrl().'/tpl/vehicle-empty.png');
 
@@ -270,10 +274,10 @@ trait CyclyFrontendVehicles {
 			if (!$value || $value == '-' || $value == '0 kg')
 				continue;
 
-			if($property == 'wheelSize')
+			if ($property == 'wheelSize')
 				$value .= '"';
 
-			if($property == 'weight')
+			if ($property == 'weight')
 				$value .= ' Kg';
 
 			HtmlNode::dt()

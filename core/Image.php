@@ -69,12 +69,12 @@ class Image {
 	public function loadUrl(string $path): self {
 		$data = file_get_contents($path);
 		if ($data === false)
-			throw new Exception(sprintf('Fehler beim Laden des Bildes "%s"', $path));
+			throw new \Exception(sprintf('Fehler beim Laden des Bildes "%s"', $path));
 
 		$this->handle = imagecreatefromstring($data);
 
 		if (!$this->handle)
-			throw new Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
+			throw new \Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
 
 		return $this;
 	}
@@ -84,11 +84,10 @@ class Image {
 	 * @param string $path
 	 * @param string $ext
 	 * @return $this
-	 * @throws Exception
 	 */
 	public function loadImage(string $path, ?string $ext = null): self {
 		if (!is_readable($path))
-			throw new Exception(sprintf('Datei "%s" kann nicht gelesen werden', $path));
+			throw new \Exception(sprintf('Datei "%s" kann nicht gelesen werden', $path));
 
 		if (!$ext)
 			$ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -110,7 +109,7 @@ class Image {
 				$this->loadGifImage($path);
 				break;
 			default:
-				throw new Exception(sprintf('Dateiendung "%s" unbekannt', $ext));
+				throw new \Exception(sprintf('Dateiendung "%s" unbekannt', $ext));
 		}
 
 		return $this;
@@ -121,7 +120,7 @@ class Image {
 		$this->handle = imagecreatefromjpeg($path);
 
 		if (!$this->handle)
-			throw new Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
+			throw new \Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
 
 		return $this;
 	}
@@ -131,7 +130,7 @@ class Image {
 		$this->handle = imagecreatefrompng($path);
 
 		if (!$this->handle)
-			throw new Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
+			throw new \Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
 
 		imagealphablending($this->handle, true);
 		imagesavealpha($this->handle, true);
@@ -144,7 +143,7 @@ class Image {
 		$this->handle = imagecreatefromgif($path);
 
 		if (!$this->handle)
-			throw new Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
+			throw new \Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
 
 		return $this;
 	}
@@ -154,7 +153,7 @@ class Image {
 		$this->handle = imagecreatefromwbmp($path);
 
 		if (!$this->handle)
-			throw new Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
+			throw new \Exception(sprintf('Bild "%s" konnte nicht konvertiert werden', $path));
 
 		return $this;
 	}
@@ -168,7 +167,7 @@ class Image {
 		$this->handle = imagecreatefromstring($string);
 
 		if (!$this->handle)
-			throw new Exception('Bild aus String konnte nicht konvertiert werden');
+			throw new \Exception('Bild aus String konnte nicht konvertiert werden');
 
 		imagealphablending($this->handle, true);
 		imagesavealpha($this->handle, true);
@@ -181,14 +180,13 @@ class Image {
 	 * @param int $height Max-Höhe
 	 * @param int $type RESIZE_MAX, RESIZE_CROP, RESIZE_MAX
 	 * @return $this
-	 * @throws Exception
 	 */
 	public function resize(int $width = 0, int $height = 0, int $type = self::RESIZE_MAX): self {
 		$oWidth = $this->getX();
 		$oHeight = $this->getY();
 		$factor = $oWidth / $oHeight;
 		if (!$width && !$height)
-			throw new Exception('Keine Grösse angegeben');
+			throw new \Exception('Keine Grösse angegeben');
 
 		if (!$height)
 			$height = round($width / $factor);
@@ -230,7 +228,7 @@ class Image {
 				imagecopyresampled($handle, $this->handle, 0, 0, 0, 0, $width, $height, $oWidth, $oHeight);
 				break;
 			default:
-				throw new Exception('Unbekannter Resize-Typ');
+				throw new \Exception('Unbekannter Resize-Typ');
 		}
 
 		$this->handle = $handle;
@@ -541,7 +539,7 @@ class Image {
 				imagegif($this->handle);
 				break;
 			default:
-				throw new Exception('Imagetype nicht gefunden: '.$type);
+				throw new \Exception('Imagetype nicht gefunden: '.$type);
 		}
 
 		return $this;
@@ -587,7 +585,7 @@ class Image {
 				imagegif($this->handle, $path);
 				break;
 			default :
-				throw new Exception('Kann ImageType nicht speichern: '.$type);
+				throw new \Exception('Kann ImageType nicht speichern: '.$type);
 		}
 
 		return $this;
@@ -604,7 +602,7 @@ class Image {
 		try {
 			$this->render($type, $quality);
 			$content = ob_get_contents();
-		} catch (Exception $ex) {
+		} catch (\Exception $ex) {
 			ob_end_clean();
 			throw $ex;
 		}
@@ -626,7 +624,7 @@ class Image {
 	 * @return HtmlNode
 	 */
 	public function getHtml(): HtmlNode {
-		return \HtmlNode::img()->attr('width', $this->getX())->attr('height', $this->getY())->attr('src', $this->getDataURL());
+		return HtmlNode::img()->attr('width', $this->getX())->attr('height', $this->getY())->attr('src', $this->getDataURL());
 	}
 
 	public function __destruct() {
@@ -663,24 +661,5 @@ class Image {
 	 */
 	public static function create(int $width, int $height) {
 		return new self(null, $width, $height);
-	}
-
-	/**
-	 * Bild an Stelle verkleinern
-	 * @param string $path
-	 * @param int $width
-	 * @param int $height
-	 * @param bool $maxQuality
-	 * @return string
-	 * @throws Exception
-	 */
-	public static function getResized(string $path, int $width, int $height, bool $maxQuality = false): string {
-		$ext = StringTools::pregFirstMatch('/\.([a-z]+)$/i', $path);
-		$target = substr($path, 0, -strlen($ext)).$width.'x'.$height.'.'.$ext;
-		if (file_exists($target))
-			return $target;
-
-		Image::open($path)->resize($width, $height, self::RESIZE_MAX)->save($target, IMAGETYPE_UNKNOWN,$maxQuality ? ($ext == 'png' ? 0 : 100) : null);
-		return $target;
 	}
 }
