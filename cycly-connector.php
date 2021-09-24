@@ -10,7 +10,7 @@
  * Plugin Name:       	CYCLY Connector
  * Plugin URI:        	https://cycly.ch
  * Description:       	Ermöglicht das Einbinden von Daten aus CYCLY direkt auf Ihre Website.
- * Version:           	0.9.9.8
+ * Version:           	0.9.10.0
  * Requires at least: 	5.0
  * Requires PHP:     	7.3
  * Author:           	CYCLY (Optimanet Schweiz AG)
