@@ -140,6 +140,7 @@ trait CyclyFrontendVehicles {
 		$label = HtmlNode::label()
 			->append(HtmlNode::span('Sortieren:')->addClass('title'))
 			->append($select)
+			->addClass('filter')
 			->setStyle('display', $attSortable ? null : 'none');
 
 		$filterBody->append(
