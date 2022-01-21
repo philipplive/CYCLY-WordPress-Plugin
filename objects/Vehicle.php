@@ -251,7 +251,6 @@ class Vehicle extends Item {
 		$this->time = new \DateTime($data->time);
 		$this->price = $data->price;
 		$this->discountPrice = $data->discountPrice;
-
 		$this->images = [];
 
 		foreach ($data->images as $imgdata) {

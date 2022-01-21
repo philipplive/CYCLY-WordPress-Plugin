@@ -16,6 +16,7 @@ Wichtig: Die Parameter-Werte sind jeweils Komma getrennt, kleingeschrieben, ohne
 * Optional kann mittels **categories="citybike,trekkingbike"** die Auswahl der möglichen Fahrzeugkategorien eingeschränkt werden.
 * Optional kann mittels **types="neufahrzeug"** die Auswahl der möglichen Fahrzeugtypen eingeschränkt werden.
 * Optional kann mittels **onstock="true"** die Auswahl auf aktuell verfügbare Fahrzeuge beschränkt werden.
+* Optional kann mittels **notonstock="true"** die Auswahl auf aktuell nicht lagernde Fahrzeuge beschränkt werden.
 * Optional kann mittels **sort=4** die Standard-Sortierreihenfolge geändert werden (1 = Preis absteigend, 2 = Preis aufsteigend (standard), 3 = Baujahr absteigend, 4 ) Baujahr aufsteigend.
 * Optional kann mittels **sortable="false"** die Sortierfunktion ausgeblendet werden.
 * Optional kann mittels **limit=3** die maximale Anzahl Fahrzeuge welche direkt angezeigt werden (mehr via button "Mehr anzeigen").
