@@ -19,6 +19,12 @@ class Vehicle extends Item {
 	public $model = '';
 
 	/**
+	 * 1 = order, 2 = ordered, 10 = delivered, 20 = assembly, 21 = assembled
+	 * @var int
+	 */
+	public $stateId = 0;
+
+	/**
 	 * Hersteller
 	 * @var string
 	 */
@@ -224,6 +230,7 @@ class Vehicle extends Item {
 		parent::fromData($data);
 		$this->id = $data->id;
 		$this->model = $data->model;
+		$this->stateId = $data->stateId;
 		$this->manufacturer = $data->manufacturer;
 		$this->manufacturerKey = str_replace([' ', '-'], '', strtolower($data->manufacturer));
 		$this->type = $data->type;

@@ -113,10 +113,12 @@ trait CyclyFrontendVehicles {
 					->append($vehicle->model)
 					->addClass('title')
 			);
-			$bike->append(HtmlNode::div()
-				->append(\HfCore\Price::format($vehicle->price))
-				->addClass('price')
-			);
+			if ($vehicle->price) {
+				$bike->append(HtmlNode::div()
+					->append(\HfCore\Price::format($vehicle->price))
+					->addClass('price')
+				);
+			}
 
 			$items->append($bike);
 		}
@@ -224,24 +226,26 @@ trait CyclyFrontendVehicles {
 		$dl = HtmlNode::dl()
 			->appendTo($container);
 
-		HtmlNode::dt()
-			->setText('Netto Preis:')
-			->appendTo($dl);
-
-		HtmlNode::dd()
-			->addClass('price')
-			->setText(\HfCore\Price::format($vehicle->discountPrice ? $vehicle->discountPrice : $vehicle->price))
-			->appendTo($dl);
-
-		if ($vehicle->discountPrice) {
+		if ($vehicle->price) {
 			HtmlNode::dt()
-				->setText('Preis:')
+				->setText('Netto Preis:')
 				->appendTo($dl);
 
 			HtmlNode::dd()
-				->addClass('oldPrice')
-				->setText(\HfCore\Price::format($vehicle->price))
+				->addClass('price')
+				->setText(\HfCore\Price::format($vehicle->discountPrice ? $vehicle->discountPrice : $vehicle->price))
 				->appendTo($dl);
+
+			if ($vehicle->discountPrice) {
+				HtmlNode::dt()
+					->setText('Preis:')
+					->appendTo($dl);
+
+				HtmlNode::dd()
+					->addClass('oldPrice')
+					->setText(\HfCore\Price::format($vehicle->price))
+					->appendTo($dl);
+			}
 		}
 
 		HtmlNode::dt()

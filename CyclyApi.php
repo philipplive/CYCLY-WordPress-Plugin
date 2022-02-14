@@ -27,8 +27,8 @@ class CyclyApi {
 
 		$jsonResult = $result->getFromJSON();
 
-		//print_r($jsonResult);
-
+		if ($result->httpCode == 401)
+			throw new AccessException();
 		if ($result->httpCode == 403)
 			throw new AccessException();
 		if ($result->httpCode != 200)
