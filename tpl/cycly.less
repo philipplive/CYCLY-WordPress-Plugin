@@ -56,6 +56,10 @@
 				color: #f00;
 			}
 
+			.price-normal span{
+				text-decoration: line-through;
+			}
+
 			.item-image {
 				position: relative;
 				min-height: 250px;
@@ -79,6 +83,32 @@
 					background: rgba(0, 0, 0, 0.03);
 					transition: opacity 0.2s ease-in-out;
 				}
+			}
+
+			.item-highlight, .item-discount {
+				position: absolute;
+				top: 1rem;
+				right: 1rem;
+				width: 3.2rem;
+				height: 3.2rem;
+				border-radius: 50%;
+				background: var(--colorAccent);
+				overflow: hidden;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				span {
+					color: #fff;
+					text-transform: uppercase;
+					transform: rotate(-35deg);
+					font-size: 0.8rem;
+					font-weight: bold;
+				}
+			}
+
+			.item-discount {
+				background: #ff0000;
 			}
 		}
 
@@ -285,6 +315,10 @@
 			.price {
 				font-weight: 800;
 				color: #ce2323;
+			}
+
+			.old-price{
+				text-decoration: line-through;
 			}
 
 			.oldPrice {

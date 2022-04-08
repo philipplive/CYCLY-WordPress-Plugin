@@ -115,9 +115,24 @@ trait CyclyFrontendVehicles {
 			);
 			if ($vehicle->price) {
 				$bike->append(HtmlNode::div()
-					->append(\HfCore\Price::format($vehicle->price))
+					->append(\HfCore\Price::format($vehicle->discountPrice ?: $vehicle->price))
 					->addClass('price')
 				);
+			}
+
+			if ($vehicle->discountPrice) {
+				HtmlNode::div()
+					->addClass('price-normal')
+					->setText('statt ')
+					->append(HtmlNode::span()->setText(\HfCore\Price::format($vehicle->price)))
+					->appendTo($bike);
+
+				// Aktionssticker
+				$discount = 100 / $vehicle->price * ($vehicle->price - $vehicle->discountPrice);
+				HtmlNode::div()
+					->addClass('item-discount')
+					->append(HtmlNode::span()->setText('-'.round($discount).'%'))
+					->appendTo($bike);
 			}
 
 			$items->append($bike);
@@ -223,31 +238,34 @@ trait CyclyFrontendVehicles {
 			->addClass('vehicle-price')
 			->appendTo($infos);
 
+		// Preis
+		$price = $vehicle->price;
+		$discountPrice = $vehicle->discountPrice;
+
 		$dl = HtmlNode::dl()
 			->appendTo($container);
 
-		if ($vehicle->price) {
+		HtmlNode::dt()
+			->setText($discountPrice ? 'Aktionspreis:' : 'Preis:')
+			->appendTo($dl);
+
+		HtmlNode::dd()
+			->addClass('price')
+			->setText($discountPrice ? \HfCore\Price::format($discountPrice) : \HfCore\Price::format($price))
+			->appendTo($dl);
+
+		if ($discountPrice) {
 			HtmlNode::dt()
-				->setText('Netto Preis:')
+				->setText('Vorheriger Preis')
 				->appendTo($dl);
 
 			HtmlNode::dd()
-				->addClass('price')
-				->setText(\HfCore\Price::format($vehicle->discountPrice ? $vehicle->discountPrice : $vehicle->price))
+				->addClass('old-price')
+				->setText(\HfCore\Price::format($price))
 				->appendTo($dl);
-
-			if ($vehicle->discountPrice) {
-				HtmlNode::dt()
-					->setText('Preis:')
-					->appendTo($dl);
-
-				HtmlNode::dd()
-					->addClass('oldPrice')
-					->setText(\HfCore\Price::format($vehicle->price))
-					->appendTo($dl);
-			}
 		}
 
+		// Weitere Details
 		HtmlNode::dt()
 			->setText('Garantie:')
 			->appendTo($dl);
@@ -278,14 +296,14 @@ trait CyclyFrontendVehicles {
 		$dl = HtmlNode::dl()
 			->appendTo($container);
 
-		foreach (['Kategorie' => 'category', 'Jahr' => 'year', 'Farbe' => 'color', 'Rahmengrösse' => 'frameSizeFormated', 'Radgrösse' => 'wheelSize', 'Gewicht' => 'weight', 'Grösse' => 'height', 'Bremsen' => 'brakes', 'Schaltung' => 'shifting', 'Motor' => 'engine', 'Batterie' => 'battery'] as $title => $property) {
+		foreach (['Kategorie' => 'category', 'Typ' => 'type', 'Jahr' => 'year', 'Farbe' => 'color', 'Rahmengrösse' => 'frameSizeFormated', 'Rahmengrösse' => 'frameSizeFormated', 'Radgrösse' => 'wheelSize', 'Gewicht' => 'weight', 'Grösse' => 'height', 'Bremsen' => 'brakes', 'Schaltung' => 'shifting', 'Motor' => 'engine', 'Batterie' => 'battery'] as $title => $property) {
 			$value = $vehicle->$property;
 
 			if (!$value || $value == '-' || $value == '0 kg')
 				continue;
 
 			if ($property == 'wheelSize')
-				$value .= '"';
+				$value .= ' Zoll';
 
 			if ($property == 'weight')
 				$value .= ' Kg';
