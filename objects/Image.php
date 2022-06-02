@@ -71,6 +71,10 @@ class Image extends Item {
 		if (!$file->exists()) {
 			$image = new \HfCore\Image($this->getFile()->getPath());
 			$image->resize($width, $height, $type);
+
+			if($image->type == IMAGETYPE_PNG)
+				$image->setBackgroundColor(new \HfCore\Color('#ffffff'));
+
 			$file->write($image->getString(IMAGETYPE_JPEG, 75));
 		}
 

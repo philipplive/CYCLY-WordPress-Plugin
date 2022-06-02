@@ -423,6 +423,26 @@ class Image {
 	}
 
 	/**
+	 * Hintergrundfarbe setzen (bei PNG)
+	 * @param Color $color
+	 * @return $this
+	 */
+	public function setBackgroundColor(Color $color): self {
+		$newHandle = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+		imagefill($newHandle, 0, 0, $this->newColor($color));
+
+		imagecopyresampled(
+			$newHandle, $this->handle,
+			0, 0, 0, 0,
+			$this->getWidth(), $this->getHeight(),
+			$this->getWidth(), $this->getHeight()
+		);
+
+		$this->handle = $newHandle;
+		return $this;
+	}
+
+	/**
 	 * Kopiere Bild in Bild
 	 * @param Image $img bild, welches hineinkopiert wird
 	 * @param int $x x abstand
