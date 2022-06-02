@@ -50,18 +50,6 @@ abstract class FileInfo {
 		$this->setPath($path);
 	}
 
-	public function mapProperties() {
-		parent::mapProperties();
-		$this->setPropertyInfo('name', 'Name', PropertyInfo::str()->setMethodGet('getName'));
-		$this->setPropertyInfo('path', 'Pfad', PropertyInfo::path()->setMethodGet('getPath'));
-		$this->setPropertyInfo('size', 'Grösse', PropertyInfo::bytes()->setMethodGet('getSize'));
-		$this->setPropertyInfo('lastChange', 'Letzte Änderung', PropertyInfo::datetime()->setMethodGet('getLastChange'));
-		$this->setPropertyInfo('owner', 'Besitzer', PropertyInfo::str()->setMethodGet('getOwner'));
-		$this->setPropertyInfo('group', 'Gruppe', PropertyInfo::str()->setMethodGet('getGroup'));
-		$this->setPropertyInfo('chmod', 'Berechtigungen', PropertyInfo::str()->setMethodGet('getChmodAsString'));
-		$this->setPropertyInfo('mimeType', 'Mime-Type', PropertyInfo::str()->setMethodGet('getMimeType'));
-	}
-
 	abstract public function getName();
 
 	/**
