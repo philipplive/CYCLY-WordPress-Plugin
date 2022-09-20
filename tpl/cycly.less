@@ -214,6 +214,19 @@
 	align-items: center;
 	justify-content: center;
 
+	&:after {
+		content: ' ';
+		position: absolute;
+		background-image: url("../tpl/loader.png");
+		width: 64px;
+		height: 64px;
+		left: ~"calc(50% - 32px)";
+		top: ~"calc(50% - 32px)";
+		background-size: cover;
+		animation: rotation 2s infinite linear;
+		z-index: -1;
+	}
+
 	&.show {
 		display: flex;
 		opacity: 1;
@@ -269,6 +282,7 @@
 	overflow: auto;
 	border: none;
 	font-size: 16px;
+	opacity: 0;
 
 	@media screen and (max-width: 800px) {
 		max-height: calc(~"100vh - 30px");
@@ -404,5 +418,15 @@
 			border-radius: 1000px;
 			display: inline-block;
 		}
+	}
+}
+
+/* Animationen */
+@keyframes rotation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
 	}
 }

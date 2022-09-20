@@ -9,14 +9,6 @@ abstract class FileAbstract extends FileInfo {
 	 */
 	protected $content = null;
 
-	public function mapProperties() {
-		parent::mapProperties();
-		$this->setPropertyInfo('path', 'Pfad', PropertyInfo::filepath()->setMethodGet('getPath'));
-		$this->setPropertyInfo('extension', 'Dateiendung', PropertyInfo::str()->setMethodGet('getExtension'));
-		$this->setPropertyInfo('mimeType', 'Mime-Type', PropertyInfo::str()->setMethodGet('getMimeType'));
-		$this->setPropertyInfo('folderPath', 'Ordner', PropertyInfo::path()->setMethodGet('getFolderPath'));
-	}
-
 	/**
 	 * Dateinamen mit oder ohne Dateiendung
 	 * @param boolean $extension
