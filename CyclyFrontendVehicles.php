@@ -16,7 +16,7 @@ trait CyclyFrontendVehicles {
 	public function tagVehicles($atts): string {
 		// Parameter
 		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR, '') == 'true' ? true : false;
-		$attOnlyDiscount = Query::param($atts, 'onlydiscount', HfCore\T_STR, '') == 'true' ? true : false;
+		$attOnlyDiscount = Query::param($atts, 'discount', HfCore\T_STR, '') == 'true' ? true : false;
 		$attNotOnstock = Query::param($atts, 'notonstock', HfCore\T_STR, '') == 'true' ? true : false;
 		$attCategories = Query::param($atts, 'categories', HfCore\T_STR, '');
 		$attManufacturers = Query::param($atts, 'manufacturers', HfCore\T_STR, '');
