@@ -187,6 +187,12 @@ class Vehicle extends Item {
 	public $discountPrice = 0.0;
 
 	/**
+	 * Aktionspreis?
+	 * @var bool
+	 */
+	public $isDiscount = false;
+
+	/**
 	 * Bilder
 	 * @var Image[]
 	 */
@@ -258,6 +264,7 @@ class Vehicle extends Item {
 		$this->time = new \DateTime($data->time);
 		$this->price = $data->price;
 		$this->discountPrice = $data->discountPrice;
+		$this->isDiscount = $this->discountPrice != 0.0;
 		$this->images = [];
 
 		foreach ($data->images as $imgdata) {
