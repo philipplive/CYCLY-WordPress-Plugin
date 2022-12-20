@@ -99,7 +99,7 @@ class GitHub {
 	 * @param int|null $maxAge in Sekunden
 	 * @return object
 	 */
-	public function githubApiRequest(array $query, ?int $maxAge = null): object {
+	public function githubApiRequest(array $query, ?int $maxAge = null) {
 		$id = md5(implode('|', $query));
 
 		if ($maxAge) {
