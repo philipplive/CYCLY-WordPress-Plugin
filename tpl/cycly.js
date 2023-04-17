@@ -130,8 +130,8 @@ class BikeModule {
 			}
 
 			if (this.sort == this.SORT.PRICE_ASC || this.sort == this.SORT.PRICE_DESC) {
-				val1 = parseInt(a.dataset.price);
-				val2 = parseInt(b.dataset.price);
+				val1 = parseInt(a.dataset.discountprice ? a.dataset.discountprice : a.dataset.price);
+				val2 = parseInt(b.dataset.discountprice ? b.dataset.discountprice : b.dataset.price);
 			}
 
 			if (val1 > val2)

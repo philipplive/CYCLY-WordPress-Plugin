@@ -101,6 +101,9 @@ trait CyclyFrontendVehicles {
 				->data('year', $vehicle->year)
 				->data('price', (int)$vehicle->price);
 
+			if ($vehicle->discountPrice)
+				$bike->data('discountprice', (int)$vehicle->discountPrice);
+
 			$img = HtmlNode::div()->appendTo($bike)->addClass('item-image');
 
 			if (count($vehicle->images))
