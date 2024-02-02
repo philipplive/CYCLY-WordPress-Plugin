@@ -6,7 +6,7 @@ namespace Cycly;
  * Class BlogEntry
  * @package Cycly
  */
-class BlogEntry extends Item{
+class BlogEntry extends Item {
 	/**
 	 * @var int
 	 */
@@ -65,10 +65,10 @@ class BlogEntry extends Item{
 		$this->intro = $data->intro;
 		$this->content = $data->content;
 		$this->html = $data->html;
-		$this->time = new \DateInterval($data->delivery);
-		$this->changed = new \DateInterval($data->changed);
-		$this->published = new \DateInterval($data->published);
-
+		$this->time = new \DateTime($data->delivery);
+		$this->changed = new \DateTime($data->changed);
+		$this->published = new \DateTime($data->published);
+		//print_r($data);
 		return $this;
 	}
 }

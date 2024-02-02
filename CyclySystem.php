@@ -179,4 +179,20 @@ class CyclySystem extends HfCore\System {
 
 		return $items;
 	}
+
+	/**
+	 * Blogeinträge
+	 * @return \Cycly\Employee[]
+	 */
+	protected function getBlogEntrys(): array {
+		$entrys = [];
+
+		foreach (\Cycly\CyclyApi::cacheRequest(['extension', 'websiteblog']) as $data) {
+			$item = new \Cycly\BlogEntry();
+			$item->fromData($data);
+			$entrys[$data->id] = $item;
+		}
+
+		return $entrys;
+	}
 }

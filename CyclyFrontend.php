@@ -5,6 +5,7 @@ use \HfCore\HtmlNode;
 class CyclyFrontend extends CyclySystem  {
 	use CyclyFrontendVehicles;
 	use CyclyFrontendEmployees;
+	use CyclyFrontendBlog;
 
 	public function __construct() {
 		parent::__construct();
@@ -15,6 +16,7 @@ class CyclyFrontend extends CyclySystem  {
 		// Wordpress Tags erfassen
 		add_shortcode('show_vehicles', [$this, 'tagVehicles']); // Veloübersicht
 		add_shortcode('show_employees', [$this, 'tagEmployees']); // Mitarbeiterübersicht
+		add_shortcode('show_blog', [$this, 'tagBlog']); // Blog
 
 		// Api Endpunkte
 		$this->getApi()->addEndpoint('bike/(?P<id>\d+)', [$this, 'apiGetBike']);

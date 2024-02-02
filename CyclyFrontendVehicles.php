@@ -16,6 +16,7 @@ trait CyclyFrontendVehicles {
 	public function tagVehicles($atts): string {
 		// Parameter
 		$attOnstock = Query::param($atts, 'onstock', HfCore\T_STR, '') == 'true' ? true : false;
+		$attOnlyDiscount = Query::param($atts, 'discount', HfCore\T_STR, '') == 'true' ? true : false;
 		$attNotOnstock = Query::param($atts, 'notonstock', HfCore\T_STR, '') == 'true' ? true : false;
 		$attCategories = Query::param($atts, 'categories', HfCore\T_STR, '');
 		$attManufacturers = Query::param($atts, 'manufacturers', HfCore\T_STR, '');
@@ -35,6 +36,10 @@ trait CyclyFrontendVehicles {
 		// Nicht an Lager
 		if ($attNotOnstock)
 			new VehicleFilter($vehicles, 'stock', [0 => 'Nicht an Lager'], 'Nicht an Lager');
+
+		// An Lager
+		if ($attOnlyDiscount)
+			new VehicleFilter($vehicles, 'isDiscount', [1 => 'Sonderangebot'], 'Sonderangebot');
 
 		// Kategorien
 		$categories = [];
@@ -95,6 +100,9 @@ trait CyclyFrontendVehicles {
 				->data('manufacturerkey', $vehicle->manufacturerKey)
 				->data('year', $vehicle->year)
 				->data('price', (int)$vehicle->price);
+
+			if ($vehicle->discountPrice)
+				$bike->data('discountprice', (int)$vehicle->discountPrice);
 
 			$img = HtmlNode::div()->appendTo($bike)->addClass('item-image');
 
