@@ -88,12 +88,6 @@ class CyclyWidget extends WP_Widget {
 				->appendText(' '.implode(' / ', $times));
 		}
 
-		HtmlNode::div()
-			->appendTo($element)
-			->append(HtmlNode::strong()->setText('Sonntag & Montag:'))
-			->appendText(' geschlossen');
-
-
 		// Ausnahmen demnächst
 		$pending = $openinghours->getIrregularsPending();
 		if (count($pending)) {
