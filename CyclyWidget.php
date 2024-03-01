@@ -1,4 +1,5 @@
 <?php
+
 use \HfCore\HtmlNode;
 
 /**
@@ -26,7 +27,7 @@ class CyclyWidget extends WP_Widget {
 
 		try {
 			echo $this->drawOpeningHours($instance['branch']);
-		}catch (\Exception $ex){
+		} catch (\Exception $ex) {
 			echo "Keine Öffnungezeiten hinterlegt";
 		}
 
@@ -43,8 +44,8 @@ class CyclyWidget extends WP_Widget {
 		foreach (\HfCore\System::getInstance()->getBranches() as $branch) {
 			$option = HtmlNode::option($branch->name)->value($branch->id);
 
-			if (esc_attr($instance['branch']) == $branch->id)
-				$option->attr('selected','');
+			if (isset($instance['branch']) && esc_attr($instance['branch']) == $branch->id)
+				$option->attr('selected', '');
 
 			$select->append($option);
 		}
