@@ -11,7 +11,6 @@
 		cursor: pointer;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		grid-gap: 2rem;
 		grid-gap: 20px;
 		grid-row-gap: 40px;
 		margin: 40px 0;
@@ -75,13 +74,15 @@
 				&::before {
 					content: '';
 					position: absolute;
-					top: 0;
-					z-index: -1;
 					left: 0;
 					right: 0;
+					top: 0;
 					bottom: 0;
 					background: rgba(0, 0, 0, 0.03);
-					transition: opacity 0.2s ease-in-out;
+				}
+
+				&:hover::before {
+					background: rgba(0, 0, 0, 0.06);
 				}
 			}
 
@@ -271,7 +272,6 @@
 /* Dialog Grundlayout*/
 .cycly-vehicles .dialog {
 	text-align: left;
-	background-color: #fff;
 	max-height: calc(~"100vh - 35px");
 	position: relative;
 	width: calc(~"100% - 70px");

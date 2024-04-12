@@ -71,9 +71,6 @@ class System {
 		require_once('io/FolderLocal.php');
 		require_once('CurlClient.php');
 
-		// Libs
-		require_once('libs/lessc.inc.php');
-
 		// Plugin Name
 		$this->pluginName = explode('/',explode('/wp-content/plugins/',debug_backtrace()[0]['file'])[1])[0];
 
@@ -180,7 +177,7 @@ class System {
 	}
 
 	/**
-	 * Pfad zum Cache-Ordner
+	 * URL zum Cache-Ordner
 	 * @param string $folder Cache Unterordner wählen
 	 * @return string  www.test.ch/blabla....
 	 */

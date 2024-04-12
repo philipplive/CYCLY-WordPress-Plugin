@@ -21,11 +21,18 @@ class Template {
 	 * @param $file z.B. tpl/test.less
 	 */
 	public function addCssFile(string $file): self {
-		$fileOut = str_replace('/', '-', $file);
-		$fileOut = str_replace('.less', '.css', $fileOut);
+		require_once('libs/less/Less.php');
 
-		$less = new \hf_lessc();
-		$less->checkedCompile($this->system->getPluginPath().$file, System::getInstance()->getPluginCachePath().$fileOut);
+		$options = [
+			'cache_dir' => System::getInstance()->getPluginCachePath(),
+			'prefix' => 'css_',
+			'prefix_vars' => 'vars_',
+			'compress' => false,
+			'sourceMap' => false,
+			'indentation' => "\t",
+		];
+
+		$fileOut = \Less_Cache::Get([$this->system->getPluginPath().$file => dirname($file)], $options);
 
 		$this->cssFiles[] = $fileOut;
 
@@ -80,14 +87,14 @@ class Template {
 	 * @param int $severity
 	 */
 	public static function addAdminNoticeBox(string $txt, int $severity = \Severity::WARNING) {
-		add_action('admin_notices', function () use ($txt,$severity) {
+		add_action('admin_notices', function () use ($txt, $severity) {
 			$class = 'notice';
 
-			if($severity == \Severity::WARNING)
+			if ($severity == \Severity::WARNING)
 				$class .= ' notice-warning';
-			if($severity == \Severity::ERROR)
+			if ($severity == \Severity::ERROR)
 				$class .= ' notice-error';
-			if($severity == \Severity::SUCCESS)
+			if ($severity == \Severity::SUCCESS)
 				$class .= ' notice-success';
 
 			printf('<div class="%1$s"><p>%2$s</p></div>', $class, $txt);
