@@ -67,22 +67,10 @@ class Vehicle extends Item {
 	public $year = 0;
 
 	/**
-	 * Farbe
-	 * @var string
-	 */
-	public $color = '';
-
-	/**
 	 * Rahmengrösse in cm
 	 * @var float
 	 */
 	public $frameSize = 0.0;
-
-	/**
-	 * Rahmengrösse formatiert
-	 * @var string
-	 */
-	public $frameSizeFormated = '';
 
 	/**
 	 * Radgrösse in Zoll
@@ -97,30 +85,6 @@ class Vehicle extends Item {
 	public $weight = 0.0;
 
 	/**
-	 * Für Körpergrösse von
-	 * @var int
-	 */
-	public $heightFrom = 0;
-
-	/**
-	 * Für Körpergrösse bis
-	 * @var int
-	 */
-	public $heightTo = 0;
-
-	/**
-	 * Schaltung
-	 * @var string
-	 */
-	public $shifting = '';
-
-	/**
-	 * Bremsen
-	 * @var string
-	 */
-	public $brakes = '';
-
-	/**
 	 * Motor
 	 * @var string
 	 */
@@ -131,12 +95,6 @@ class Vehicle extends Item {
 	 * @var string
 	 */
 	public $battery = '';
-
-	/**
-	 * Erweiterte Informationen
-	 * @var string
-	 */
-	public $description = '';
 
 	/**
 	 * Im Laden
@@ -193,6 +151,12 @@ class Vehicle extends Item {
 	public $isDiscount = false;
 
 	/**
+	 * Fahrzeuparameter
+	 * @var VehicleParameter[]
+	 */
+	public $parameters = [];
+
+	/**
 	 * Bilder
 	 * @var Image[]
 	 */
@@ -213,19 +177,28 @@ class Vehicle extends Item {
 		return $this->categoryCache = \System::getInstance()->getVehicleCategoryById($this->categoryId);
 	}
 
+	public function getParameterCategories() : array{
+	    $categories = [];
 
-	public function getDescription(): string {
-		return trim(preg_replace('/^(.+)\:(.+)$/m', '', $this->description));
+		foreach ($this->parameters as $parameter)
+			$categories[$parameter->category] = $parameter->category;
+
+		return $categories;
 	}
 
-	public function getDescriptionProperties(): array {
-		$list = [];
-		$data = null;
-		preg_match_all('/^(.+)\:(.+)$/m', $this->description, $data);
-		foreach ($data[1] as $i => $title) {
-			$list[$title] = $data[2][$i];
+	/**
+	 * @param $categoryName
+	 * @return VehicleParameter[]
+	 */
+	public function getParametersByCategory($categoryName): array{
+		$parameters = [];
+
+		foreach ($this->parameters as $parameter){
+			if($parameter->category == $categoryName && !empty($parameter->valueFormated) && $parameter->valueFormated != '-')
+				$parameters[] = $parameter;
 		}
-		return $list;
+
+		return $parameters;
 	}
 
 	/**
@@ -244,18 +217,11 @@ class Vehicle extends Item {
 		$this->category = $data->category ?? '';
 		$this->categoryId = $data->categoryId ?? 0;
 		$this->year = $data->year ?? 0;
-		$this->color = $data->color ?? '';
 		$this->frameSize = $data->frameSize ?? 0.0;
-		$this->frameSizeFormated = $data->frameSizeFormated ?? '';
 		$this->wheelSize = $data->wheelSize ?? 0.0;
 		$this->weight = $data->weight ?? 0.0;
-		$this->heightFrom = $data->heightFrom ?? 0;
-		$this->heightTo = $data->heightTo ?? 0;
-		$this->shifting = $data->shifting ?? '';
-		$this->brakes = $data->brakes ?? '';
 		$this->engine = $data->engine ?? '';
 		$this->battery = $data->battery ?? '';
-		$this->description = $data->description ?? '';
 		$this->stock = $data->stock;
 		$this->deliveryDate = $data->deliveryDate ? new \DateTime($data->deliveryDate) : null;
 		$this->warranty = new \DateInterval($data->warranty);
@@ -271,6 +237,14 @@ class Vehicle extends Item {
 			$image = new \Cycly\Image();
 			$image->fromData($imgdata);
 			$this->images[] = $image;
+		}
+
+		if(isset($data->parameters)) {
+			foreach ($data->parameters as $parameter) {
+				$param = new \Cycly\VehicleParameter();
+				$param->fromData($parameter);
+				$this->parameters[] = $param;
+			}
 		}
 
 		return $this;

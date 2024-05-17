@@ -275,7 +275,7 @@
 	max-height: calc(~"100vh - 35px");
 	position: relative;
 	width: calc(~"100% - 70px");
-	max-width: 1000px;
+	max-width: 1200px;
 	background: #fff;
 	padding: 35px;
 	transition: all 0.22s ease-in-out;
@@ -295,7 +295,7 @@
 
 	.vehicle-details {
 		display: grid;
-		grid-template-columns: 5fr 3fr;
+		grid-template-columns: 5fr 4fr;
 		grid-column-gap: 60px;
 		grid-row-gap: 30px;
 
@@ -306,37 +306,41 @@
 
 		.vehicle-infos {
 			.description-container {
-				margin-bottom: 30px;
-			}
+				dl {
+					display: grid;
+					grid-template-columns: 3fr 5fr;
+					line-height: 1.8;
+					margin: 0;
 
-			dl {
-				display: grid;
-				grid-template-columns: 3fr 5fr;
-				line-height: 1.8;
-				margin: 0;
+					dt {
+						color: #5e5e5e;
+						font-weight: 400;
+					}
 
-				dt {
-					color: #5e5e5e;
-					font-weight: 400;
+					dd {
+						color: #303030;
+						font-weight: 600;
+					}
 				}
 
-				dd {
-					color: #303030;
-					font-weight: 600;
+				.price {
+					font-weight: 800;
+					color: #ce2323;
 				}
-			}
 
-			.price {
-				font-weight: 800;
-				color: #ce2323;
-			}
+				.old-price{
+					text-decoration: line-through;
+				}
 
-			.old-price{
-				text-decoration: line-through;
-			}
+				.oldPrice {
+					text-decoration: line-through;
+				}
 
-			.oldPrice {
-				text-decoration: line-through;
+				h3 {
+					margin: 20px 0 10px 0;
+					font-style: italic;
+					font-size: 18px;
+				}
 			}
 		}
 
@@ -370,13 +374,6 @@
 		strong {
 			font-weight: 800;
 		}
-	}
-
-	h3 {
-		margin: 0;
-		font-style: italic;
-		font-size: 18px;
-		margin-bottom: 10px;
 	}
 }
 

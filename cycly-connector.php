@@ -42,6 +42,7 @@ else {
 	require_once('objects/BlogEntry.php');
 	require_once('objects/VehicleCategory.php');
 	require_once('objects/VehicleType.php');
+	require_once('objects/VehicleParameter.php');
 	require_once('objects/Vehicle.php');
 	require_once('objects/Employee.php');
 	require_once('CyclyFrontendBlog.php');

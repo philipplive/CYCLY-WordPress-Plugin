@@ -243,7 +243,6 @@ trait CyclyFrontendVehicles {
 
 		$container = HtmlNode::div()
 			->addClass('description-container')
-			->addClass('vehicle-price')
 			->appendTo($infos);
 
 		// Preis
@@ -291,65 +290,40 @@ trait CyclyFrontendVehicles {
 			->setText($vehicle->stock ? 'Ja' : ($vehicle->deliveryDate ? 'Liefertermin: '.$vehicle->deliveryDate->format('Y-m-d H:i:s') : 'Nein'))
 			->appendTo($dl);
 
-		// Spezifikationen
-		$container = HtmlNode::div()
-			->addClass('description-container')
-			->addClass('vehicle-specs')
-			->appendTo($infos);
+		HtmlNode::dt()
+			->setText('Kategorie:')
+			->appendTo($dl);
 
-		HtmlNode::h3()
-			->setText('Spezifikationen')
-			->appendTo($container);
+		HtmlNode::dd()
+			->setText($vehicle->category)
+			->appendTo($dl);
 
-		$dl = HtmlNode::dl()
-			->appendTo($container);
 
-		foreach (['Kategorie' => 'category', 'Typ' => 'type', 'Jahr' => 'year', 'Farbe' => 'color', 'Rahmengrösse' => 'frameSizeFormated', 'Rahmengrösse' => 'frameSizeFormated', 'Radgrösse' => 'wheelSize', 'Gewicht' => 'weight', 'Grösse' => 'height', 'Bremsen' => 'brakes', 'Schaltung' => 'shifting', 'Motor' => 'engine', 'Batterie' => 'battery'] as $title => $property) {
-			$value = $vehicle->$property;
 
-			if (!$value || $value == '-' || $value == '0 kg')
+		// Details
+		foreach ($vehicle->getParameterCategories() as $category){
+			$parameters = $vehicle->getParametersByCategory($category);
+
+			if(!count($parameters))
 				continue;
 
-			if ($property == 'wheelSize')
-				$value .= ' Zoll';
-
-			if ($property == 'weight')
-				$value .= ' Kg';
-
-			HtmlNode::dt()
-				->setText($title.':')
-				->appendTo($dl);
-
-			HtmlNode::dd()
-				->setText($value)
-				->appendTo($dl);
-		}
-
-		foreach ($vehicle->getDescriptionProperties() as $title => $value) {
-			HtmlNode::dt()
-				->setText($title.':')
-				->appendTo($dl);
-
-			HtmlNode::dd()
-				->setText($value)
-				->appendTo($dl);
-		}
-
-		// Beschreibung
-		$description = $vehicle->getDescription();
-		if ($description) {
-			$container = HtmlNode::div()
-				->addClass('description-container')
-				->addClass('vehicle-description')
-				->appendTo($infos);
-
 			HtmlNode::h3()
-				->setText('Beschreibung')
+				->setText($category)
 				->appendTo($container);
 
-			HtmlNode::p()
-				->setText($vehicle->getDescription())
+
+			$dl = HtmlNode::dl()
 				->appendTo($container);
+
+			foreach ($parameters as $parameter){
+				HtmlNode::dt()
+					->setText($parameter->titleShort.':')
+					->appendTo($dl);
+
+				HtmlNode::dd()
+					->setText($parameter->valueFormated)
+					->appendTo($dl);
+			}
 		}
 
 		echo $element;
