@@ -178,7 +178,7 @@ class Vehicle extends Item {
 	}
 
 	public function getParameterCategories() : array{
-	    $categories = [];
+		$categories = [];
 
 		foreach ($this->parameters as $parameter)
 			$categories[$parameter->category] = $parameter->category;
@@ -212,21 +212,21 @@ class Vehicle extends Item {
 		$this->stateId = $data->stateId;
 		$this->manufacturer = $data->manufacturer;
 		$this->manufacturerKey = str_replace([' ', '-'], '', strtolower($data->manufacturer));
-		$this->type = $data->type ?? '';
-		$this->typeId = $data->typeId ?? 0;
-		$this->category = $data->category ?? '';
-		$this->categoryId = $data->categoryId ?? 0;
-		$this->year = $data->year ?? 0;
-		$this->frameSize = $data->frameSize ?? 0.0;
-		$this->wheelSize = $data->wheelSize ?? 0.0;
-		$this->weight = $data->weight ?? 0.0;
-		$this->engine = $data->engine ?? '';
-		$this->battery = $data->battery ?? '';
-		$this->stock = $data->stock;
-		$this->deliveryDate = $data->deliveryDate ? new \DateTime($data->deliveryDate) : null;
-		$this->warranty = new \DateInterval($data->warranty);
-		$this->website = $data->website ?? false;
-		$this->highlight = $data->highlight;
+		$this->type = $this->readProperty($data, 'type') ?? '';
+		$this->typeId = $this->readProperty($data, 'typeId') ?? 0;
+		$this->category = $this->readProperty($data, 'category') ?? '';
+		$this->categoryId = $this->readProperty($data, 'categoryId') ?? 0;
+		$this->year = $this->readProperty($data, 'year') ?? 0;
+		$this->frameSize = $this->readProperty($data, 'frameSize')  ?? 0.0;
+		$this->wheelSize = $this->readProperty($data, 'wheelSize') ?? 0.0;
+		$this->weight = $this->readProperty($data, 'weight') ?? 0.0;
+		$this->engine = $this->readProperty($data, 'engine') ?? '';
+		$this->battery = $this->readProperty($data, 'battery') ?? '';
+		$this->stock = $this->readProperty($data, 'stock');
+		$this->deliveryDate = $this->readProperty($data, 'deliveryDate') ? new \DateTime($data->deliveryDate) : null;
+		$this->warranty = $this->readProperty($data, 'warranty') ? new \DateInterval($data->warranty);
+		$this->website = $this->readProperty($data, 'website') ?? false;
+		$this->highlight = $this->readProperty($data, 'highlight');
 		$this->time = new \DateTime($data->time);
 		$this->price = $data->price;
 		$this->discountPrice = $data->discountPrice;
@@ -248,5 +248,12 @@ class Vehicle extends Item {
 		}
 
 		return $this;
+	}
+	
+	private function readProperty(\stdClass $data, string $property) {
+		if(!property_exists($data, $property))
+			return null; 
+		
+		return $data->{$property};
 	}
 }
