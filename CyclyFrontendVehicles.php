@@ -298,8 +298,6 @@ trait CyclyFrontendVehicles {
 			->setText($vehicle->category)
 			->appendTo($dl);
 
-
-
 		// Details
 		foreach ($vehicle->getParameterCategories() as $category){
 			$parameters = $vehicle->getParametersByCategory($category);
@@ -310,7 +308,6 @@ trait CyclyFrontendVehicles {
 			HtmlNode::h3()
 				->setText($category)
 				->appendTo($container);
-
 
 			$dl = HtmlNode::dl()
 				->appendTo($container);

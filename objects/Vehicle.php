@@ -177,8 +177,8 @@ class Vehicle extends Item {
 		return $this->categoryCache = \System::getInstance()->getVehicleCategoryById($this->categoryId);
 	}
 
-	public function getParameterCategories() : array{
-	    $categories = [];
+	public function getParameterCategories(): array {
+		$categories = [];
 
 		foreach ($this->parameters as $parameter)
 			$categories[$parameter->category] = $parameter->category;
@@ -190,11 +190,11 @@ class Vehicle extends Item {
 	 * @param $categoryName
 	 * @return VehicleParameter[]
 	 */
-	public function getParametersByCategory($categoryName): array{
+	public function getParametersByCategory($categoryName): array {
 		$parameters = [];
 
-		foreach ($this->parameters as $parameter){
-			if($parameter->category == $categoryName && !empty($parameter->valueFormated) && $parameter->valueFormated != '-')
+		foreach ($this->parameters as $parameter) {
+			if ($parameter->category == $categoryName && !empty($parameter->valueFormated) && $parameter->valueFormated != '-')
 				$parameters[] = $parameter;
 		}
 
@@ -208,40 +208,40 @@ class Vehicle extends Item {
 	public function fromData(\stdClass $data) {
 		parent::fromData($data);
 		$this->id = $data->id;
-		$this->model = $data->model;
-		$this->stateId = $data->stateId;
-		$this->manufacturer = $data->manufacturer;
-		$this->manufacturerKey = str_replace([' ', '-'], '', strtolower($data->manufacturer));
-		$this->type = $data->type ?? '';
-		$this->typeId = $data->typeId ?? 0;
-		$this->category = $data->category ?? '';
-		$this->categoryId = $data->categoryId ?? 0;
-		$this->year = $data->year ?? 0;
-		$this->frameSize = $data->frameSize ?? 0.0;
-		$this->wheelSize = $data->wheelSize ?? 0.0;
-		$this->weight = $data->weight ?? 0.0;
-		$this->engine = $data->engine ?? '';
-		$this->battery = $data->battery ?? '';
-		$this->stock = $data->stock;
-		$this->deliveryDate = $data->deliveryDate ? new \DateTime($data->deliveryDate) : null;
-		$this->warranty = new \DateInterval($data->warranty);
-		$this->website = $data->website ?? false;
-		$this->highlight = $data->highlight;
-		$this->time = new \DateTime($data->time);
-		$this->price = $data->price;
-		$this->discountPrice = $data->discountPrice;
-		$this->isDiscount = $this->discountPrice != 0.0;
+		$this->fetchInProperty($data, 'model');
+		$this->fetchInProperty($data, 'stateId', null, 0);
+		$this->fetchInProperty($data, 'manufacturer');
+		$this->fetchInProperty($data, 'type');
+		$this->fetchInProperty($data, 'typeId', null, 0);
+		$this->fetchInProperty($data, 'category');
+		$this->fetchInProperty($data, 'categoryId', null, 0);
+		$this->fetchInProperty($data, 'year', null, 0);
+		$this->fetchInProperty($data, 'frameSize', null, 0.0);
+		$this->fetchInProperty($data, 'wheelSize', null, 0.0);
+		$this->fetchInProperty($data, 'weight', null, 0.0);
+		$this->fetchInProperty($data, 'engine');
+		$this->fetchInProperty($data, 'battery');
+		$this->fetchInProperty($data, 'stock', null, 0);
+		$this->fetchInProperty($data, 'highlight', null, false);
+		$this->fetchInProperty($data, 'website', null, false);
+		$this->fetchInProperty($data, 'price', null, 0.0);
+		$this->fetchInProperty($data, 'discountPrice', null, 0.0);
+		$this->warranty = $this->fetchIn($data, 'warranty', null) ? new \DateInterval($this->fetchIn($data, 'warranty')) : null;
+		$this->time = $this->fetchIn($data, 'time', null) ? new \DateTime($this->fetchIn($data, 'time')) : new \DateTime();
+		$this->deliveryDate = $this->fetchIn($data, 'deliveryDate', null) ? new \DateTime($this->fetchIn($data, 'deliveryDate')) : new \DateTime();
+		$this->manufacturerKey = str_replace([' ', '-'], '', strtolower($this->manufacturer));
+
 		$this->images = [];
 
 		foreach ($data->images as $imgdata) {
-			$image = new \Cycly\Image();
+			$image = new Image();
 			$image->fromData($imgdata);
 			$this->images[] = $image;
 		}
 
-		if(isset($data->parameters)) {
+		if (isset($data->parameters)) {
 			foreach ($data->parameters as $parameter) {
-				$param = new \Cycly\VehicleParameter();
+				$param = new VehicleParameter();
 				$param->fromData($parameter);
 				$this->parameters[] = $param;
 			}
