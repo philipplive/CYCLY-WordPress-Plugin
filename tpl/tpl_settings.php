@@ -2,7 +2,7 @@
 	<h2>CYCLY Plugin</h2>
 	<?php if (!$this->getGitHub()->isUpToDate()) { ?>
 		<div class="update-nag notice notice-error inline cycly-update-dialog">
-			Ein Update für CYCLY ist verfügbar. Ihre Version </br> <?php echo $this->getGitHub()->getVersion(true);?> ist veraltet.
+			Ein Update für CYCLY ist verfügbar. Ihre Version </br> <?php echo $this->getGitHub()->getVersion();?> ist veraltet.
 			<a class="wp-core-ui button-primary" onclick="updateCycly();">Jetzt updaten</a>
 		</div>
 	<?php } ?>

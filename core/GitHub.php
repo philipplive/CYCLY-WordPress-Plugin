@@ -136,10 +136,12 @@ class GitHub {
 	public function isUpToDate(): bool {
 		$result = $this->system->getCacheController()->get('upToDate');
 
+		// Nicht aktuell oder Cache abgelaufen, dann erneut versuchen
 		if ($result === false) {
 			$currentVersion = $this->getVersion();
 			$remoteVersion = $this->getVersion(false);
 
+			// Git nicht abrufbar aktuell
 			if ($currentVersion == null || $remoteVersion == null)
 				return true;
 
