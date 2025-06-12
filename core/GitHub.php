@@ -120,9 +120,9 @@ class GitHub {
 	/**
 	 * Version
 	 * @param bool $localInstance
-	 * @return string
+	 * @return string|null
 	 */
-	public function getVersion(bool $localInstance = true): string {
+	public function getVersion(bool $localInstance = true) {
 		if ($localInstance)
 			return $this->getLocalHeader()['version'];
 		else
@@ -134,13 +134,19 @@ class GitHub {
 	 * @return bool
 	 */
 	public function isUpToDate(): bool {
-		$value = $this->system->getCacheController()->get('upToDate');
+		$result = $this->system->getCacheController()->get('upToDate');
 
-		if ($value === false) {
-			$value = ($this->getVersion() == $this->getVersion(false)) ? 1 : 0;
-			$this->system->getCacheController()->set('upToDate', $value, 360);
+		if ($result === false) {
+			$currentVersion = $this->getVersion();
+			$remoteVersion = $this->getVersion(false);
+
+			if ($currentVersion == null || $remoteVersion == null)
+				return true;
+
+			$result = $this->getVersion() === $this->getVersion(false);
+			$this->system->getCacheController()->set('upToDate', $result, 360);
 		}
 
-		return (bool)$value;
+		return $result;
 	}
 }
