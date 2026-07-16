@@ -2,6 +2,9 @@
 namespace HfCore;
 
 class GitHub {
+	const REPOSITORY_ZIP_URL = 'http://repository.cycly.bike/wp-plugin/wp-plugin.zip';
+	const REPOSITORY_VERSION_URL = 'http://repository.cycly.bike/wp-plugin/version.txt';
+
 	private $system = null;
 
 	public function __construct(System $system) {
@@ -14,11 +17,19 @@ class GitHub {
 		return $this->parseHeader($file);
 	}
 
-	public function getMasterHeader(): array {
-		$name = $this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']])->full_name;
-		$file = CurlClient::create(sprintf('https://raw.githubusercontent.com/%s/master/%s.php', $name, $this->system->getPluginName()))->exec()->getBody();
+	/**
+	 * Version vom Repository abrufen
+	 * @return string|null
+	 */
+	public function getRemoteVersion(): ?string {
+		try {
+			$version = trim(CurlClient::create(self::REPOSITORY_VERSION_URL)->exec()->getBody());
+		}
+		catch (\Exception $ex) {
+			return null;
+		}
 
-		return $this->parseHeader($file);
+		return $version ?: null;
 	}
 
 	/**
@@ -42,10 +53,7 @@ class GitHub {
 	}
 
 	private function downloadMasterZip(): FileLocal {
-		$data = $this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']]);
-		$url = sprintf('https://codeload.github.com/%s/zip/refs/heads/master', $data->full_name);
-
-		return IO::getFile($this->system->getPluginCachePath().'master.zip')->write(CurlClient::create($url)->exec()->getBody());
+		return IO::getFile($this->system->getPluginCachePath().'master.zip')->write(CurlClient::create(self::REPOSITORY_ZIP_URL)->exec()->getBody());
 	}
 
 	/**
@@ -71,8 +79,8 @@ class GitHub {
 			throw new \Exception('Fehler beim entpacken');
 		}
 
-		// Verschieben und ersetzen
-		$tmp->getClone()->cd($this->githubApiRequest(['repositories', $this->getLocalHeader()['githubid']])->name.'-master')->copy(IO::getFolder($this->system->getPluginPath()));
+		// Verschieben und ersetzen (Dateien liegen direkt im Root des Zips)
+		$tmp->copy(IO::getFolder($this->system->getPluginPath()));
 
 		// Tmp löschen
 		$tmp->getParentFolder()->clear();
@@ -94,39 +102,15 @@ class GitHub {
 	}
 
 	/**
-	 * Request zur GitHub API
-	 * @param array $query
-	 * @param int|null $maxAge in Sekunden
-	 * @return object
-	 */
-	public function githubApiRequest(array $query, ?int $maxAge = null) {
-		$id = md5(implode('|', $query));
-
-		if ($maxAge) {
-			$result = $this->system->getCacheController()->get($id);
-
-			if ($result)
-				return $result;
-		}
-
-		$result = CurlClient::create('https://api.github.com/'.implode('/', $query))->setUserAgent('User-Agent: WordPress')->exec()->getFromJSON();
-
-		if ($maxAge)
-			$this->system->getCacheController()->set($id, $result, $maxAge);
-
-		return $result;
-	}
-
-	/**
 	 * Version
 	 * @param bool $localInstance
 	 * @return string|null
 	 */
 	public function getVersion(bool $localInstance = true) {
 		if ($localInstance)
-			return $this->getLocalHeader()['version'];
+			return $this->getLocalHeader()['version'] ?? null;
 		else
-			return $this->getMasterHeader($localInstance)['version'];
+			return $this->getRemoteVersion();
 	}
 
 	/**
